@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1", "make": "Toyota", "model": "Vitz", "yearRange": "2015 - 2019",
+    "category": "Hatchback", "priceMin": 6500000, "priceMax": 7500000,
+    "specs": { "engine": "1.0L / 1.3L", "transmission": "CVT", "fuel": "Petrol" },
+    "commonIssues": ["CVT gearbox shuddering at low speeds", "ABS module failure in high mileage cars", "Front suspension bushing wear"]
+  },
+  {
+    "id": "2", "make": "Honda", "model": "Vezel", "yearRange": "2014 - 2018",
+    "category": "SUV", "priceMin": 8500000, "priceMax": 10000000,
+    "specs": { "engine": "1.5L Hybrid", "transmission": "7-Speed DCT", "fuel": "Hybrid" },
+    "commonIssues": ["DCT overheating", "Hybrid battery degradation", "Steering rack noise"]
+  },
+  {
+    "id": "3", "make": "Toyota", "model": "Premio", "yearRange": "2012 - 2016",
+    "category": "Sedan", "priceMin": 9000000, "priceMax": 11000000,
+    "specs": { "engine": "1.5L / 1.8L", "transmission": "CVT", "fuel": "Petrol" },
+    "commonIssues": ["Rust on rear wheel arches", "Oil leaks from valve cover", "AC compressor failure"]
+  },
+  {
+    "id": "4", "make": "Toyota", "model": "Hilux", "yearRange": "2012 - 2018",
+    "category": "Truck", "priceMin": 12000000, "priceMax": 16000000,
+    "specs": { "engine": "2.4L / 2.8L Diesel", "transmission": "Manual / Auto", "fuel": "Diesel" },
+    "commonIssues": ["DPF clogging", "Rear leaf spring wear", "Turbo whine at high mileage"]
+  }
+]
