@@ -1,26 +1,17 @@
 [
-  {
-    "id": "1", "make": "Toyota", "model": "Vitz", "yearRange": "2015 - 2019",
-    "category": "Hatchback", "priceMin": 6500000, "priceMax": 7500000,
-    "specs": { "engine": "1.0L / 1.3L", "transmission": "CVT", "fuel": "Petrol" },
-    "commonIssues": ["CVT gearbox shuddering at low speeds", "ABS module failure in high mileage cars", "Front suspension bushing wear"]
-  },
-  {
-    "id": "2", "make": "Honda", "model": "Vezel", "yearRange": "2014 - 2018",
-    "category": "SUV", "priceMin": 8500000, "priceMax": 10000000,
-    "specs": { "engine": "1.5L Hybrid", "transmission": "7-Speed DCT", "fuel": "Hybrid" },
-    "commonIssues": ["DCT overheating", "Hybrid battery degradation", "Steering rack noise"]
-  },
-  {
-    "id": "3", "make": "Toyota", "model": "Premio", "yearRange": "2012 - 2016",
-    "category": "Sedan", "priceMin": 9000000, "priceMax": 11000000,
-    "specs": { "engine": "1.5L / 1.8L", "transmission": "CVT", "fuel": "Petrol" },
-    "commonIssues": ["Rust on rear wheel arches", "Oil leaks from valve cover", "AC compressor failure"]
-  },
-  {
-    "id": "4", "make": "Toyota", "model": "Hilux", "yearRange": "2012 - 2018",
-    "category": "Truck", "priceMin": 12000000, "priceMax": 16000000,
-    "specs": { "engine": "2.4L / 2.8L Diesel", "transmission": "Manual / Auto", "fuel": "Diesel" },
-    "commonIssues": ["DPF clogging", "Rear leaf spring wear", "Turbo whine at high mileage"]
-  }
+{"id":"1","make":"Toyota","model":"Vitz","yearRange":"2015 - 2019","category":"Hatchback","priceMin":6500000,"priceMax":7500000,"specs":{"Engine":"1.0L / 1.3L","Transmission":"CVT","Fuel":"Petrol"},"commonIssues":["CVT shuddering at low speeds","ABS module failure in high mileage cars","Front suspension bushing wear"]},
+{"id":"2","make":"Suzuki","model":"Alto","yearRange":"2015 - 2020","category":"Hatchback","priceMin":3200000,"priceMax":4200000,"specs":{"Engine":"0.66L / 0.8L","Transmission":"AGS / CVT","Fuel":"Petrol"},"commonIssues":["AGS gearbox jerking","Weak suspension on rough roads","AC compressor noise"]},
+{"id":"3","make":"Toyota","model":"Aqua","yearRange":"2014 - 2018","category":"Hatchback","priceMin":6800000,"priceMax":8500000,"specs":{"Engine":"1.5L Hybrid","Transmission":"e-CVT","Fuel":"Hybrid"},"commonIssues":["Hybrid battery degradation","Inverter coolant pump failure","Rear shock wear"]},
+{"id":"4","make":"Honda","model":"Fit","yearRange":"2014 - 2018","category":"Hatchback","priceMin":6500000,"priceMax":8000000,"specs":{"Engine":"1.3L / 1.5L Hybrid","Transmission":"CVT / DCT","Fuel":"Hybrid / Petrol"},"commonIssues":["DCT hesitation on hybrid","Hybrid battery aging","Engine mount wear"]},
+{"id":"5","make":"Toyota","model":"Premio","yearRange":"2012 - 2016","category":"Sedan","priceMin":9000000,"priceMax":11000000,"specs":{"Engine":"1.5L / 1.8L","Transmission":"CVT","Fuel":"Petrol"},"commonIssues":["Rust on rear wheel arches","Oil leak from valve cover","AC compressor failure"]},
+{"id":"6","make":"Toyota","model":"Allion","yearRange":"2012 - 2016","category":"Sedan","priceMin":8800000,"priceMax":10800000,"specs":{"Engine":"1.5L / 1.8L","Transmission":"CVT","Fuel":"Petrol"},"commonIssues":["CVT fluid neglect causing slip","Power window regulator failure","Front lower arm bushes"]},
+{"id":"7","make":"Honda","model":"Grace","yearRange":"2015 - 2018","category":"Sedan","priceMin":8500000,"priceMax":10000000,"specs":{"Engine":"1.5L Hybrid","Transmission":"7-Speed DCT","Fuel":"Hybrid"},"commonIssues":["DCT judder","Hybrid battery degradation","Infotainment glitches"]},
+{"id":"8","make":"Nissan","model":"Bluebird Sylphy","yearRange":"2012 - 2016","category":"Sedan","priceMin":6500000,"priceMax":8000000,"specs":{"Engine":"1.8L","Transmission":"CVT","Fuel":"Petrol"},"commonIssues":["CVT overheating","Steering rack leaks","Rust under door sills"]},
+{"id":"9","make":"Honda","model":"Vezel","yearRange":"2014 - 2018","category":"SUV","priceMin":8500000,"priceMax":10000000,"specs":{"Engine":"1.5L Hybrid","Transmission":"7-Speed DCT","Fuel":"Hybrid"},"commonIssues":["DCT overheating","Hybrid battery degradation","Steering rack noise"]},
+{"id":"10","make":"Toyota","model":"Rush","yearRange":"2018 - 2022","category":"SUV","priceMin":11000000,"priceMax":13500000,"specs":{"Engine":"1.5L","Transmission":"4-Speed Auto","Fuel":"Petrol"},"commonIssues":["Rear suspension clunks","Door seal wind noise","Paint chipping on bumpers"]},
+{"id":"11","make":"Mitsubishi","model":"Montero Sport","yearRange":"2012 - 2017","category":"SUV","priceMin":14000000,"priceMax":18000000,"specs":{"Engine":"2.4L / 2.5L Diesel","Transmission":"Auto 4WD","Fuel":"Diesel"},"commonIssues":["Turbo wear at high mileage","Injector faults","4WD transfer case noise"]},
+{"id":"12","make":"Toyota","model":"Prado","yearRange":"2010 - 2016","category":"SUV","priceMin":22000000,"priceMax":30000000,"specs":{"Engine":"2.7L Petrol / 3.0L Diesel","Transmission":"Auto 4WD","Fuel":"Petrol / Diesel"},"commonIssues":["Meter-rolled mileage on imports","Air suspension faults","Rust on underbody"]},
+{"id":"13","make":"Toyota","model":"Hilux","yearRange":"2012 - 2018","category":"Truck","priceMin":12000000,"priceMax":16000000,"specs":{"Engine":"2.4L / 2.8L Diesel","Transmission":"Manual / Auto","Fuel":"Diesel"},"commonIssues":["DPF clogging","Rear leaf spring wear","Turbo whine at high mileage"]},
+{"id":"14","make":"Isuzu","model":"D-Max","yearRange":"2012 - 2018","category":"Truck","priceMin":10000000,"priceMax":14000000,"specs":{"Engine":"2.5L / 3.0L Diesel","Transmission":"Manual / Auto","Fuel":"Diesel"},"commonIssues":["EGR valve clogging","Clutch wear in commercial use","Chassis rust"]},
+{"id":"15","make":"Nissan","model":"Navara","yearRange":"2010 - 2016","category":"Truck","priceMin":9000000,"priceMax":13000000,"specs":{"Engine":"2.5L Diesel","Transmission":"Manual / Auto","Fuel":"Diesel"},"commonIssues":["Timing chain stretch","Rear axle noise","Radiator corrosion"]}
 ]

@@ -1,21 +1,7 @@
 [
-  { "category": "Engine Sound", "items": [
-    { "id": "e1", "text": "Cold start is smooth, no knocking" },
-    { "id": "e2", "text": "No blue or white smoke from exhaust" },
-    { "id": "e3", "text": "No oil leaks under the engine" } ] },
-  { "category": "Body & Rust", "items": [
-    { "id": "b1", "text": "No rust on wheel arches or sills" },
-    { "id": "b2", "text": "Panel gaps are even (no accident repair)" },
-    { "id": "b3", "text": "Paint colour matches on all panels" } ] },
-  { "category": "Transmission", "items": [
-    { "id": "t1", "text": "Smooth gear changes, no jerking" },
-    { "id": "t2", "text": "No slipping or shuddering" } ] },
-  { "category": "Interior & Electronics", "items": [
-    { "id": "i1", "text": "AC blows cold" },
-    { "id": "i2", "text": "Windows, lights and wipers work" },
-    { "id": "i3", "text": "No warning lights on dashboard" } ] },
-  { "category": "Test Drive", "items": [
-    { "id": "d1", "text": "Car tracks straight, no pulling" },
-    { "id": "d2", "text": "Brakes firm, no vibration" },
-    { "id": "d3", "text": "No suspension noise over bumps" } ] }
+{"category":"Engine Sound","items":[{"id":"e1","text":"Cold start is smooth, no knocking"},{"id":"e2","text":"No blue or white smoke from exhaust"},{"id":"e3","text":"No oil leaks under the engine"}]},
+{"category":"Body & Rust","items":[{"id":"b1","text":"No rust on wheel arches or sills"},{"id":"b2","text":"Panel gaps are even (no accident repair)"},{"id":"b3","text":"Paint colour matches on all panels"}]},
+{"category":"Transmission","items":[{"id":"t1","text":"Smooth gear changes, no jerking"},{"id":"t2","text":"No slipping or shuddering"}]},
+{"category":"Interior & Electronics","items":[{"id":"i1","text":"AC blows cold"},{"id":"i2","text":"Windows, lights and wipers work"},{"id":"i3","text":"No warning lights on dashboard"}]},
+{"category":"Test Drive","items":[{"id":"d1","text":"Car tracks straight, no pulling"},{"id":"d2","text":"Brakes firm, no vibration"},{"id":"d3","text":"No suspension noise over bumps"}]}
 ]
