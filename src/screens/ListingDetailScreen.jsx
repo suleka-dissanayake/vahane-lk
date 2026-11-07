@@ -97,9 +97,14 @@ export default function ListingDetailScreen({ route, navigation }) {
       </View>
 
       {isOwner && (
+        <>
+        <TouchableOpacity style={styles.editBtn} onPress={() => navigation.push('PostAd', { editId: listing.id })}>
+          <Text style={styles.editText}>✏️ Edit this ad</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.delBtn} onPress={remove}>
           <Text style={styles.delText}>Delete this ad</Text>
         </TouchableOpacity>
+        </>
       )}
       <View style={{ height: 40 }} />
     </ScrollView>
@@ -118,6 +123,8 @@ const styles = StyleSheet.create({
   faultBtn: { backgroundColor: '#e8eef7', padding: 12, borderRadius: 10, alignItems: 'center' },
   callBtn: { backgroundColor: colors.primary, padding: 12, borderRadius: 10, marginTop: 8 },
   callText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
-  delBtn: { marginTop: 20, padding: 12, borderRadius: 10, borderWidth: 1, borderColor: colors.fail },
+  editBtn: { marginTop: 20, padding: 12, borderRadius: 10, backgroundColor: colors.primary },
+  editText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
+  delBtn: { marginTop: 10, padding: 12, borderRadius: 10, borderWidth: 1, borderColor: colors.fail },
   delText: { color: colors.fail, textAlign: 'center', fontWeight: '600' },
 });

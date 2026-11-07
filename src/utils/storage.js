@@ -45,6 +45,10 @@ export async function addListing(listing) {
   const list = await getListings();
   await write(K.listings, [listing, ...list]);
 }
+export async function updateListing(listing) {
+  const list = await getListings();
+  await write(K.listings, list.map((l) => (l.id === listing.id ? listing : l)));
+}
 export async function deleteListing(id) {
   const list = await getListings();
   const target = list.find((l) => l.id === id);

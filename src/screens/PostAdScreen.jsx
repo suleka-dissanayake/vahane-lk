@@ -6,6 +6,7 @@ import { formatM } from '../utils/format';
 import { notify } from '../utils/alert';
 import Dropdown from '../components/Dropdown';
 import { pickPhoto, takePhoto } from '../utils/files';
+import { getListing, getAttachmentData } from '../utils/storage';
 import { colors } from '../theme';
 
 const MAX_PHOTOS = 10;
@@ -60,7 +61,42 @@ export default function PostAdScreen({ route, navigation }) {
   useEffect(() => {
     if (!user) navigation.replace('Auth', { redirect: 'PostAd' });
   }, [user]);
+
+  // Edit mode: load the existing ad into the form
+  const editId = route.params?.editId;
+  const [editReady, setEditReady] = useState(!editId);
+  useEffect(() => {
+    if (!editId || !user) return;
+    navigation.setOptions({ title: 'Edit Ad' });
+    (async () => {
+      const l = await getListing(editId);
+      if (!l || l.ownerId !== user.id) {
+        notify('You can only edit your own ads');
+        return navigation.goBack();
+      }
+      setCondition(l.condition || 'Used');
+      setCategory(LEGACY_CATEGORY[l.category] || l.category);
+      setMake(l.make || '');
+      setModel(l.model || '');
+      setYear(String(l.year ?? ''));
+      setMileage(String(l.mileage ?? ''));
+      setPrice(String(l.price ?? ''));
+      setFuel(l.fuel || 'Petrol');
+      setGear(l.transmission || 'Automatic');
+      setDistrict(l.district || '');
+      setPhone(l.phone || '');
+      setDescription(l.description || '');
+      setCountry(l.manufactureCountry || '');
+      setGrade(l.auctionGrade || '');
+      setAuthority(l.auctionAuthority || '');
+      const ids = l.photoIds || (l.photoId ? [l.photoId] : []);
+      const loaded = await Promise.all(ids.map(async (id) => ({ id, name: 'photo', type: 'image', dataUri: await getAttachmentData(id) })));
+      setPhotos(loaded.filter((p) => p.dataUri));
+      setEditReady(true);
+    })();
+  }, [editId, user]);
   if (!user) return null;
+  if (!editReady) return null;
 
   const isRecon = condition === 'Reconditioned';
   // If the typed make + model matches a known model, we can show the market range and common faults
@@ -94,6 +130,7 @@ export default function PostAdScreen({ route, navigation }) {
 
     navigation.navigate('InspectionForm', {
       photos,
+      editId,
       details: {
         carModelId: known ? known.id : null,
         condition,
@@ -107,7 +144,7 @@ export default function PostAdScreen({ route, navigation }) {
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
-      <Text style={styles.step}>Step 1 of 2: Vehicle details</Text>
+      <Text style={styles.step}>{editId ? 'Edit ad. ' : ''}Step 1 of 2: Vehicle details</Text>
 
       <Text style={styles.label}>Is the vehicle Used or Reconditioned?</Text>
       <Chips options={CONDITIONS} value={condition} onChange={setCondition} />

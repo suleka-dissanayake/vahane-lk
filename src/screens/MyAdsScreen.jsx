@@ -53,9 +53,14 @@ export default function MyAdsScreen({ navigation }) {
         renderItem={({ item }) => (
           <View>
             <ListingCard listing={item} onPress={() => navigation.navigate('ListingDetail', { id: item.id })} />
-            <TouchableOpacity onPress={() => remove(item.id)} style={{ alignSelf: 'flex-end', marginTop: -4, marginBottom: 10 }}>
-              <Text style={{ color: colors.fail }}>Delete ad</Text>
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: -4, marginBottom: 10 }}>
+              <TouchableOpacity onPress={() => navigation.push('PostAd', { editId: item.id })} style={{ marginRight: 22 }}>
+                <Text style={{ color: colors.accent, fontWeight: '700' }}>✏️ Edit ad</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => remove(item.id)}>
+                <Text style={{ color: colors.fail }}>Delete ad</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       />
