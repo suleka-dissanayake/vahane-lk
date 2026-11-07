@@ -1,0 +1,76 @@
+import React, { useCallback, useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { useAuth } from '../context/AuthContext';
+import { getListings, deleteListing } from '../utils/storage';
+import { confirmAction } from '../utils/alert';
+import ListingCard from '../components/ListingCard';
+import { colors } from '../theme';
+
+export default function MyAdsScreen({ navigation }) {
+  const { user, logout } = useAuth();
+  const [ads, setAds] = useState([]);
+
+  const load = async () => {
+    const all = await getListings();
+    setAds(all.filter((l) => user && l.ownerId === user.id));
+  };
+  useFocusEffect(useCallback(() => { load(); }, [user]));
+
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.empty}>Please login to see your ads</Text>
+        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Auth', {})}>
+          <Text style={styles.btnText}>Login</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const remove = (id) =>
+    confirmAction('Delete this ad?', 'The ad and its report will be removed.', async () => {
+      await deleteListing(id);
+      load();
+    });
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.head}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.name}>{user.name}</Text>
+          <Text style={{ color: colors.muted }}>@{user.username} • {user.phone}</Text>
+        </View>
+        <TouchableOpacity onPress={async () => { await logout(); navigation.navigate('Home'); }}>
+          <Text style={{ color: colors.fail, fontWeight: '600' }}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={ads}
+        keyExtractor={(i) => i.id}
+        ListEmptyComponent={<Text style={styles.empty}>You have not posted any ads yet</Text>}
+        renderItem={({ item }) => (
+          <View>
+            <ListingCard listing={item} onPress={() => navigation.navigate('ListingDetail', { id: item.id })} />
+            <TouchableOpacity onPress={() => remove(item.id)} style={{ alignSelf: 'flex-end', marginTop: -4, marginBottom: 10 }}>
+              <Text style={{ color: colors.fail }}>Delete ad</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      />
+      <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('PostAd')}>
+        <Text style={styles.btnText}>+ Post New Ad</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, backgroundColor: colors.bg },
+  head: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', padding: 14, borderRadius: 12, marginBottom: 12 },
+  name: { fontSize: 18, fontWeight: 'bold' },
+  empty: { textAlign: 'center', marginTop: 30, color: colors.muted },
+  btn: { backgroundColor: colors.primary, padding: 14, borderRadius: 12, marginTop: 10 },
+  btnText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
+});
