@@ -1,19 +1,23 @@
-# Vahane.lk - Used Car Inspection & Valuation Guide
+# Vahane.lk - Used Car Marketplace with Inspection Reports
 
-An offline React Native (Expo) app that helps used-car buyers in Sri Lanka inspect vehicles and check price ranges.
+Existing Sri Lankan vehicle sites (riyasewana.com, ikman.lk) list vehicles but give buyers no standard inspection report.
+Vahane.lk makes the inspection report the core of every ad.
 
 ## Features
-- 5 screens: Home, Valuation Search, Model Detail, Inspection Checklist, Saved Reports
-- Local dataset of 15 car models (no internet or APIs)
-- Search and category filter (Sedan, SUV, Hatchback, Truck)
-- Interactive checklist with Pass / Warning / Fail and notes
-- Draft auto-save and saved reports using AsyncStorage
+- Browse ads without logging in (search, category filter, sorting)
+- Login / register required to post ads (stored locally)
+- Posting an ad requires a completed inspection checklist (14 items: Pass / Warning / Fail + notes)
+- Buyers see a clear report on each ad: score, verdict, issues found, every checked item, notes
+- Price guide and common faults per model, plus a market price comparison on each ad
+- My Ads (view and delete), inspection draft auto-save
+- 100% offline: all data in a local dataset and AsyncStorage, no APIs
 
-## Tech
-React Native, Expo, React Navigation, AsyncStorage
+## Screens (8)
+Home (browse) • Ad Detail with report • Login/Register • Post Ad • Inspection Form • My Ads • Price Guide • Model Overview
+
+## Demo accounts
+demo / demo123, nimal / nimal123, kamala / kamala123
 
 ## Run
-```
 npm install
-npx expo start
-```
+npx expo start --web
