@@ -1,44 +1,105 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import seedListings from '../data/listings.json';
+import seedUsers from '../data/users.json';
 
-const REPORTS_KEY = 'vahane_reports';
-const DRAFT_KEY = 'vahane_draft';
+const K = {
+  listings: 'vahane_listings',
+  users: 'vahane_users',
+  session: 'vahane_session',
+  draft: 'vahane_draft',
+};
 
-export async function getReports() {
+// Simple (non-secure) hash so passwords are not stored as plain text. Local demo only.
+export function hash(str) {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) h = (h * 33) ^ str.charCodeAt(i);
+  return String(h >>> 0);
+}
+
+async function read(key, fallback) {
   try {
-    const json = await AsyncStorage.getItem(REPORTS_KEY);
-    return json ? JSON.parse(json) : [];
+    const j = await AsyncStorage.getItem(key);
+    return j ? JSON.parse(j) : fallback;
   } catch (e) {
-    return [];
+    return fallback;
   }
 }
+const write = (key, val) => AsyncStorage.setItem(key, JSON.stringify(val));
 
-export async function saveReport(report) {
-  const list = await getReports();
-  await AsyncStorage.setItem(REPORTS_KEY, JSON.stringify([report, ...list]));
-}
-
-export async function deleteReport(id) {
-  const list = await getReports();
-  await AsyncStorage.setItem(REPORTS_KEY, JSON.stringify(list.filter((r) => r.id !== id)));
-}
-
-export async function getDraft() {
+// Seed the local dataset on first launch
+export async function initData() {
   try {
-    const json = await AsyncStorage.getItem(DRAFT_KEY);
-    return json ? JSON.parse(json) : null;
+    if ((await AsyncStorage.getItem(K.listings)) === null) await write(K.listings, seedListings);
+    if ((await AsyncStorage.getItem(K.users)) === null) {
+      await write(K.users, seedUsers.map((u) => ({ ...u, password: hash(u.password) })));
+    }
+  } catch (e) {}
+}
+
+// ---- Listings ----
+export const getListings = () => read(K.listings, []);
+export async function getListing(id) {
+  return (await getListings()).find((l) => l.id === id) || null;
+}
+export async function addListing(listing) {
+  const list = await getListings();
+  await write(K.listings, [listing, ...list]);
+}
+export async function deleteListing(id) {
+  const list = await getListings();
+  const target = list.find((l) => l.id === id);
+  await write(K.listings, list.filter((l) => l.id !== id));
+  if (target && target.attachments && target.attachments.length) await removeAttachments(target.attachments);
+}
+
+// ---- Attachments (report photos / PDFs), stored under their own keys ----
+const attKey = (id) => 'vahane_att_' + id;
+export const saveAttachmentData = (id, dataUri) => AsyncStorage.setItem(attKey(id), dataUri);
+export const getAttachmentData = async (id) => {
+  try {
+    return await AsyncStorage.getItem(attKey(id));
+  } catch (e) {
+    return null;
+  }
+};
+export async function removeAttachments(list) {
+  try {
+    await Promise.all(list.map((a) => AsyncStorage.removeItem(attKey(a.id))));
+  } catch (e) {}
+}
+
+// ---- Users / session ----
+export async function registerUser({ name, username, password, phone }) {
+  const users = await read(K.users, []);
+  if (users.some((u) => u.username.toLowerCase() === username.toLowerCase())) {
+    return { ok: false, error: 'That username is already taken' };
+  }
+  const user = { id: 'u' + Date.now(), name, username, phone, password: hash(password) };
+  await write(K.users, [...users, user]);
+  await AsyncStorage.setItem(K.session, user.id);
+  return { ok: true, user };
+}
+export async function loginUser(username, password) {
+  const users = await read(K.users, []);
+  const user = users.find(
+    (u) => u.username.toLowerCase() === username.toLowerCase() && u.password === hash(password)
+  );
+  if (!user) return { ok: false, error: 'Wrong username or password' };
+  await AsyncStorage.setItem(K.session, user.id);
+  return { ok: true, user };
+}
+export async function getSessionUser() {
+  try {
+    const id = await AsyncStorage.getItem(K.session);
+    if (!id) return null;
+    return (await read(K.users, [])).find((u) => u.id === id) || null;
   } catch (e) {
     return null;
   }
 }
+export const clearSession = () => AsyncStorage.removeItem(K.session);
 
-export async function saveDraft(draft) {
-  try {
-    await AsyncStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-  } catch (e) {}
-}
-
-export async function clearDraft() {
-  try {
-    await AsyncStorage.removeItem(DRAFT_KEY);
-  } catch (e) {}
-}
+// ---- Inspection draft (progress saving) ----
+export const getDraft = () => read(K.draft, null);
+export const saveDraft = (d) => write(K.draft, d).catch(() => {});
+export const clearDraft = () => AsyncStorage.removeItem(K.draft).catch(() => {});
