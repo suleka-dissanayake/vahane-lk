@@ -13,6 +13,7 @@ export default function InspectionFormScreen({ route, navigation }) {
   const { user } = useAuth();
   const { details } = route.params;
   const model = cars.find((c) => c.id === details.carModelId);
+  const draftKey = `${details.make}|${details.model}`.toLowerCase();
   const [results, setResults] = useState({});
   const [notes, setNotes] = useState('');
   const [loaded, setLoaded] = useState(false);
@@ -24,7 +25,7 @@ export default function InspectionFormScreen({ route, navigation }) {
   // Restore saved draft for the same model (progress saving)
   useEffect(() => {
     getDraft().then((d) => {
-      if (d && d.carModelId === details.carModelId) {
+      if (d && d.draftKey === draftKey) {
         setResults(d.results || {});
         setNotes(d.notes || '');
       }
@@ -33,7 +34,7 @@ export default function InspectionFormScreen({ route, navigation }) {
   }, []);
 
   useEffect(() => {
-    if (loaded) saveDraft({ carModelId: details.carModelId, results, notes });
+    if (loaded) saveDraft({ draftKey, results, notes });
   }, [results, notes, loaded]);
 
   const publish = async () => {

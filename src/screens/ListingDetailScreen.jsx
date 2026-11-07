@@ -51,7 +51,16 @@ export default function ListingDetailScreen({ route, navigation }) {
       )}
 
       <View style={styles.box}>
+        {listing.condition ? <Text style={styles.line}>Condition: {listing.condition}</Text> : null}
         <Text style={styles.line}>Category: {listing.category}</Text>
+        {listing.condition === 'Reconditioned' && (
+          <>
+            <Text style={styles.line}>Manufacture country: {listing.manufactureCountry}</Text>
+            <Text style={styles.line}>Manufacture year: {listing.year}</Text>
+            <Text style={styles.line}>Auction grade: {listing.auctionGrade}</Text>
+            <Text style={styles.line}>Auction authority: {listing.auctionAuthority}</Text>
+          </>
+        )}
         <Text style={styles.line}>Mileage: {formatKm(listing.mileage)}</Text>
         <Text style={styles.line}>Fuel: {listing.fuel}</Text>
         <Text style={styles.line}>Transmission: {listing.transmission}</Text>
