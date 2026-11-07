@@ -97,7 +97,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={[styles.container, { paddingTop: insets.top + 12 }]}>
       <View style={styles.top}>
-        <Logo />
+        <Logo size={60} />
       </View>
 
       {user ? (
@@ -182,8 +182,8 @@ export default function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
-  top: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
-  profileBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 14, paddingHorizontal: 16, marginBottom: 10 },
+  top: { flexDirection: 'row', alignItems: 'center', marginBottom: 18 },
+  profileBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 14, paddingHorizontal: 16, marginBottom: 18 },
   avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', marginRight: 12 },
   avatarText: { color: colors.primary, fontSize: 20, fontWeight: 'bold' },
   hi: { color: '#fff', fontSize: 19, fontWeight: 'bold' },
@@ -193,15 +193,15 @@ const styles = StyleSheet.create({
   sub: { color: colors.muted, marginBottom: 6 },
   postBtn: { backgroundColor: colors.primary, paddingVertical: 14, paddingHorizontal: 20, borderRadius: 12 },
   postText: { color: '#fff', fontWeight: '700' },
-  actions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 4, marginBottom: 12 },
+  actions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 4, marginBottom: 20 },
   accountBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderWidth: 1, borderColor: '#d6deec', paddingVertical: 14, paddingHorizontal: 18, borderRadius: 12 },
   accountText: { color: '#000', fontWeight: '700', fontSize: 17 },
-  searchBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, paddingHorizontal: 12, marginBottom: 8, borderWidth: 1, borderColor: '#d6deec' },
+  searchBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, paddingHorizontal: 12, marginBottom: 14, borderWidth: 1, borderColor: '#d6deec' },
   searchInput: { flex: 1, paddingVertical: 12, paddingHorizontal: 8, fontSize: 15 },
   clear: { color: colors.muted, fontSize: 16, padding: 4 },
   row: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 6 },
   suggest: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#e8eef7', borderRadius: 16, marginRight: 8, marginBottom: 6, borderWidth: 1, borderColor: '#c9d6ea' },
-  filters: { flexDirection: 'row', marginBottom: 10 },
+  filters: { flexDirection: 'row', marginBottom: 14 },
   filterGap: { marginHorizontal: 8 },
   count: { color: colors.muted, marginBottom: 6, fontWeight: '600' },
   empty: { textAlign: 'center', marginTop: 30, color: colors.muted },
