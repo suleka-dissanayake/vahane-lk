@@ -8,6 +8,7 @@ import cars from '../data/carModels.json';
 import ListingCard from '../components/ListingCard';
 import Dropdown from '../components/Dropdown';
 import Logo from '../components/Logo';
+import { filterListings } from '../utils/search';
 import { colors } from '../theme';
 
 const TYPE_OPTIONS = [
@@ -31,17 +32,6 @@ const SORT_OPTIONS = [
   { label: 'Price: High to Low', value: 'priceHigh' },
   { label: 'Best inspection', value: 'inspection' },
 ];
-
-// Maps the dropdown's vehicle type to the category stored on each listing
-const TYPE_CATEGORIES = {
-  car: ['sedan', 'hatchback', 'car'],
-  suv: ['suv'],
-  van: ['van'],
-  lorry: ['lorry'],
-  motorcycle: ['motorcycle'],
-  threewheel: ['threewheel', 'three-wheel', 'three wheel'],
-  pickup: ['truck', 'pickup'],
-};
 
 function PersonIcon() {
   return (
@@ -80,19 +70,9 @@ export default function HomeScreen({ navigation }) {
       }).slice(0, 5)
     : [];
 
-  const shown = listings
-    .filter((l) => {
-      const text = `${l.make} ${l.model} ${l.year} ${l.district}`.toLowerCase();
-      const typeOk = type === 'all' || TYPE_CATEGORIES[type].includes(String(l.category).toLowerCase());
-      const conditionOk = condition === 'all' || (l.condition || 'Used') === condition;
-      return typeOk && conditionOk && terms.every((t) => text.includes(t));
-    })
-    .sort((a, b) => {
-      if (sort === 'priceLow') return a.price - b.price;
-      if (sort === 'priceHigh') return b.price - a.price;
-      if (sort === 'inspection') return b.report.score - a.report.score;
-      return b.postedDate.localeCompare(a.postedDate);
-    });
+  const shown = filterListings(listings, { type, condition, sort });
+
+  const search = () => navigation.navigate('SearchResults', { query: query.trim(), type, condition, sort });
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 12 }]}>
@@ -135,12 +115,17 @@ export default function HomeScreen({ navigation }) {
           placeholder="Search any vehicle"
           value={query}
           onChangeText={setQuery}
+          onSubmitEditing={search}
+          returnKeyType="search"
         />
         {query.length > 0 && (
           <TouchableOpacity onPress={() => setQuery('')}>
             <Text style={styles.clear}>✕</Text>
           </TouchableOpacity>
         )}
+        <TouchableOpacity style={styles.searchBtn} onPress={search}>
+          <Text style={styles.searchBtnText}>Search</Text>
+        </TouchableOpacity>
       </View>
 
       {suggestions.length > 0 && (
@@ -159,9 +144,7 @@ export default function HomeScreen({ navigation }) {
         <Dropdown options={SORT_OPTIONS} value={sort} onChange={setSort} />
       </View>
 
-      <Text style={styles.count}>
-        {q ? `${shown.length} ad${shown.length === 1 ? '' : 's'} for “${query.trim()}”` : `${shown.length} ads`}
-      </Text>
+      <Text style={styles.count}>{shown.length} ads</Text>
 
       <FlatList
         data={shown}
@@ -169,7 +152,7 @@ export default function HomeScreen({ navigation }) {
         keyExtractor={(i) => i.id}
         ListEmptyComponent={
           <Text style={styles.empty}>
-            No ads found{q ? ` for “${query.trim()}”. Try another model or clear the search.` : ''}
+            No ads found. Try changing the filters.
           </Text>
         }
         renderItem={({ item }) => (
@@ -196,8 +179,10 @@ const styles = StyleSheet.create({
   actions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 4, marginBottom: 20 },
   accountBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderWidth: 1, borderColor: '#d6deec', paddingVertical: 14, paddingHorizontal: 18, borderRadius: 12 },
   accountText: { color: '#000', fontWeight: '700', fontSize: 17 },
-  searchBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, paddingHorizontal: 12, marginBottom: 14, borderWidth: 1, borderColor: '#d6deec' },
+  searchBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, paddingHorizontal: 8, paddingLeft: 12, paddingVertical: 4, marginBottom: 14, borderWidth: 1, borderColor: '#d6deec' },
   searchInput: { flex: 1, paddingVertical: 12, paddingHorizontal: 8, fontSize: 15 },
+  searchBtn: { backgroundColor: colors.primary, paddingVertical: 9, paddingHorizontal: 16, borderRadius: 9, marginLeft: 6 },
+  searchBtnText: { color: '#fff', fontWeight: '700' },
   clear: { color: colors.muted, fontSize: 16, padding: 4 },
   row: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 6 },
   suggest: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#e8eef7', borderRadius: 16, marginRight: 8, marginBottom: 6, borderWidth: 1, borderColor: '#c9d6ea' },

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, Platform, StyleSheet } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import cars from '../data/carModels.json';
 import { formatM } from '../utils/format';
 import { notify } from '../utils/alert';
 import Dropdown from '../components/Dropdown';
+import { pickPhoto, takePhoto } from '../utils/files';
 import { colors } from '../theme';
 
 const CONDITIONS = ['Used', 'Reconditioned'];
@@ -49,6 +50,7 @@ export default function PostAdScreen({ route, navigation }) {
   const [district, setDistrict] = useState('');
   const [phone, setPhone] = useState(user?.phone || '');
   const [description, setDescription] = useState('');
+  const [photo, setPhoto] = useState(null);
   // Reconditioned only
   const [country, setCountry] = useState('');
   const [grade, setGrade] = useState('');
@@ -84,6 +86,7 @@ export default function PostAdScreen({ route, navigation }) {
     if (!description.trim()) return notify('Enter a description');
 
     navigation.navigate('InspectionForm', {
+      photo,
       details: {
         carModelId: known ? known.id : null,
         condition,
@@ -148,6 +151,26 @@ export default function PostAdScreen({ route, navigation }) {
           <Text style={styles.label}>Description</Text>
           <TextInput style={[styles.input, { height: 80, textAlignVertical: 'top' }]} multiline value={description} onChangeText={setDescription} />
 
+          <Text style={styles.label}>Vehicle photo (optional)</Text>
+          <View style={styles.row}>
+            <TouchableOpacity style={styles.chip} onPress={async () => { const f = await pickPhoto(); if (f) setPhoto(f); }}>
+              <Text>🖼️ Choose photo</Text>
+            </TouchableOpacity>
+            {Platform.OS !== 'web' && (
+              <TouchableOpacity style={styles.chip} onPress={async () => { const f = await takePhoto(); if (f) setPhoto(f); }}>
+                <Text>📷 Camera</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          {photo && (
+            <View style={styles.photoRow}>
+              <Image source={{ uri: photo.dataUri }} style={styles.photo} />
+              <TouchableOpacity onPress={() => setPhoto(null)}>
+                <Text style={{ color: colors.fail, fontWeight: '600' }}>Remove</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
           <TouchableOpacity style={styles.btn} onPress={next}>
             <Text style={styles.btnText}>Next: Inspection report</Text>
           </TouchableOpacity>
@@ -168,6 +191,8 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', flexWrap: 'wrap' },
   chip: { paddingHorizontal: 14, paddingVertical: 8, backgroundColor: colors.chip, borderRadius: 20, marginRight: 8, marginBottom: 8 },
   chipOn: { backgroundColor: colors.primary },
+  photoRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
+  photo: { width: 96, height: 72, borderRadius: 10, marginRight: 14, backgroundColor: '#eee' },
   hint: { color: colors.accent, marginTop: 2 },
   btn: { backgroundColor: colors.primary, padding: 16, borderRadius: 12, marginTop: 24 },
   btnText: { color: '#fff', textAlign: 'center', fontWeight: '700', fontSize: 16 },

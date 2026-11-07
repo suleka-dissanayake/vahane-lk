@@ -11,7 +11,7 @@ import { colors } from '../theme';
 
 export default function InspectionFormScreen({ route, navigation }) {
   const { user } = useAuth();
-  const { details } = route.params;
+  const { details, photo } = route.params;
   const condition = details.condition === 'Reconditioned' ? 'Reconditioned' : 'Used';
   const sections = getChecklist(condition);
   const total = totalItems(condition);
@@ -92,11 +92,13 @@ export default function InspectionFormScreen({ route, navigation }) {
     };
     const attMeta = attachments.map(({ dataUri, ...meta }) => meta);
     listing.attachments = attMeta;
+    if (photo) listing.photoId = photo.id;
     try {
       for (const a of attachments) await saveAttachmentData(a.id, a.dataUri);
+      if (photo) await saveAttachmentData(photo.id, photo.dataUri);
       await addListing(listing);
     } catch (e) {
-      await removeAttachments(attMeta);
+      await removeAttachments([...attMeta, ...(photo ? [{ id: photo.id }] : [])]);
       return notify('Could not save', 'Device storage is full. Remove some attached files and try again.');
     }
     await clearDraft();

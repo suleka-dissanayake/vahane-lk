@@ -50,6 +50,7 @@ export async function deleteListing(id) {
   const target = list.find((l) => l.id === id);
   await write(K.listings, list.filter((l) => l.id !== id));
   if (target && target.attachments && target.attachments.length) await removeAttachments(target.attachments);
+  if (target && target.photoId) await removeAttachments([{ id: target.photoId }]);
 }
 
 // ---- Attachments (report photos / PDFs), stored under their own keys ----
