@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
 import { getListings } from '../utils/storage';
 import cars from '../data/carModels.json';
@@ -12,6 +13,7 @@ const SORTS = ['Newest', 'Price: Low', 'Best inspection'];
 
 export default function HomeScreen({ navigation }) {
   const { user } = useAuth();
+  const insets = useSafeAreaInsets();
   const [listings, setListings] = useState([]);
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('All');
@@ -48,7 +50,7 @@ export default function HomeScreen({ navigation }) {
     });
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top + 12 }]}>
       <View style={styles.top}>
         <View style={{ flex: 1 }}>
           <Text style={styles.title}>Vahane.lk</Text>
@@ -114,6 +116,7 @@ export default function HomeScreen({ navigation }) {
 
       <FlatList
         data={shown}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
         keyExtractor={(i) => i.id}
         ListEmptyComponent={
           <Text style={styles.empty}>
