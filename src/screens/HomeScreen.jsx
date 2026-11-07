@@ -6,18 +6,50 @@ import { useAuth } from '../context/AuthContext';
 import { getListings } from '../utils/storage';
 import cars from '../data/carModels.json';
 import ListingCard from '../components/ListingCard';
+import Dropdown from '../components/Dropdown';
 import { colors } from '../theme';
 
-const CATEGORIES = ['All', 'Sedan', 'SUV', 'Hatchback', 'Truck'];
-const SORTS = ['Newest', 'Price: Low', 'Best inspection'];
+const TYPE_OPTIONS = [
+  { label: 'All', value: 'all' },
+  { label: 'Car', value: 'car' },
+  { label: 'SUV', value: 'suv' },
+  { label: 'Van', value: 'van' },
+  { label: 'Lorry', value: 'lorry' },
+  { label: 'Motorcycle', value: 'motorcycle' },
+  { label: 'Threewheel', value: 'threewheel' },
+  { label: 'Pickup', value: 'pickup' },
+];
+const CONDITION_OPTIONS = [
+  { label: 'Used & Recon', value: 'all' },
+  { label: 'Used', value: 'Used' },
+  { label: 'Reconditioned', value: 'Reconditioned' },
+];
+const SORT_OPTIONS = [
+  { label: 'Newest', value: 'newest' },
+  { label: 'Price: Low to High', value: 'priceLow' },
+  { label: 'Price: High to Low', value: 'priceHigh' },
+  { label: 'Best inspection', value: 'inspection' },
+];
+
+// Maps the dropdown's vehicle type to the category stored on each listing
+const TYPE_CATEGORIES = {
+  car: ['sedan', 'hatchback', 'car'],
+  suv: ['suv'],
+  van: ['van'],
+  lorry: ['lorry'],
+  motorcycle: ['motorcycle'],
+  threewheel: ['threewheel', 'three-wheel', 'three wheel'],
+  pickup: ['truck', 'pickup'],
+};
 
 export default function HomeScreen({ navigation }) {
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const [listings, setListings] = useState([]);
   const [query, setQuery] = useState('');
-  const [category, setCategory] = useState('All');
-  const [sort, setSort] = useState('Newest');
+  const [type, setType] = useState('all');
+  const [condition, setCondition] = useState('all');
+  const [sort, setSort] = useState('newest');
 
   useFocusEffect(
     useCallback(() => {
@@ -41,11 +73,14 @@ export default function HomeScreen({ navigation }) {
   const shown = listings
     .filter((l) => {
       const text = `${l.make} ${l.model} ${l.year} ${l.district}`.toLowerCase();
-      return (category === 'All' || l.category === category) && terms.every((t) => text.includes(t));
+      const typeOk = type === 'all' || TYPE_CATEGORIES[type].includes(String(l.category).toLowerCase());
+      const conditionOk = condition === 'all' || (l.condition || 'Used') === condition;
+      return typeOk && conditionOk && terms.every((t) => text.includes(t));
     })
     .sort((a, b) => {
-      if (sort === 'Price: Low') return a.price - b.price;
-      if (sort === 'Best inspection') return b.report.score - a.report.score;
+      if (sort === 'priceLow') return a.price - b.price;
+      if (sort === 'priceHigh') return b.price - a.price;
+      if (sort === 'inspection') return b.report.score - a.report.score;
       return b.postedDate.localeCompare(a.postedDate);
     });
 
@@ -93,19 +128,10 @@ export default function HomeScreen({ navigation }) {
         </View>
       )}
 
-      <View style={styles.row}>
-        {CATEGORIES.map((c) => (
-          <TouchableOpacity key={c} onPress={() => setCategory(c)} style={[styles.chip, category === c && styles.chipOn]}>
-            <Text style={category === c ? styles.chipTextOn : null}>{c}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <View style={styles.row}>
-        {SORTS.map((s) => (
-          <TouchableOpacity key={s} onPress={() => setSort(s)} style={[styles.chip, styles.sortChip, sort === s && styles.sortOn]}>
-            <Text style={sort === s ? styles.chipTextOn : null}>{s}</Text>
-          </TouchableOpacity>
-        ))}
+      <View style={styles.filters}>
+        <Dropdown options={TYPE_OPTIONS} value={type} onChange={setType} />
+        <Dropdown options={CONDITION_OPTIONS} value={condition} onChange={setCondition} style={styles.filterGap} />
+        <Dropdown options={SORT_OPTIONS} value={sort} onChange={setSort} />
       </View>
 
       <Text style={styles.count}>
@@ -143,11 +169,8 @@ const styles = StyleSheet.create({
   clear: { color: colors.muted, fontSize: 16, padding: 4 },
   row: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 6 },
   suggest: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#e8eef7', borderRadius: 16, marginRight: 8, marginBottom: 6, borderWidth: 1, borderColor: '#c9d6ea' },
-  chip: { paddingHorizontal: 14, paddingVertical: 7, backgroundColor: colors.chip, borderRadius: 20, marginRight: 8, marginBottom: 6 },
-  chipOn: { backgroundColor: colors.primary },
-  sortChip: { backgroundColor: '#eef1f6' },
-  sortOn: { backgroundColor: colors.accent },
-  chipTextOn: { color: '#fff' },
+  filters: { flexDirection: 'row', marginBottom: 10 },
+  filterGap: { marginHorizontal: 8 },
   count: { color: colors.muted, marginBottom: 6, fontWeight: '600' },
   empty: { textAlign: 'center', marginTop: 30, color: colors.muted },
 });
