@@ -1,0 +1,86 @@
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import checklist from '../data/checklistItems.json';
+import ScoreBadge from './ScoreBadge';
+import { ALL_ITEMS, OPTIONS, verdict, countStatus, scoreColor } from '../utils/report';
+import { colors } from '../theme';
+
+const colorOf = (label) => OPTIONS.find((o) => o.label === label)?.color || colors.chip;
+
+export default function InspectionReportView({ report }) {
+  const { results, notes, score, date } = report;
+  const issues = ALL_ITEMS.filter((i) => results[i.id] === 'Fail' || results[i.id] === 'Warning').sort(
+    (a, b) => (results[a.id] === 'Fail' ? 0 : 1) - (results[b.id] === 'Fail' ? 0 : 1)
+  );
+
+  return (
+    <View>
+      <View style={styles.summary}>
+        <ScoreBadge score={score} size="big" />
+        <View style={{ flex: 1, marginLeft: 14 }}>
+          <Text style={[styles.verdict, { color: scoreColor(score) }]}>{verdict(score)}</Text>
+          <Text style={styles.counts}>
+            ✓ {countStatus(results, 'Pass')} pass   ! {countStatus(results, 'Warning')} warning   ✗{' '}
+            {countStatus(results, 'Fail')} fail
+          </Text>
+          <Text style={styles.date}>Inspected on {date}</Text>
+        </View>
+      </View>
+
+      {issues.length > 0 && (
+        <View style={styles.issueBox}>
+          <Text style={styles.issueHead}>Issues found</Text>
+          {issues.map((i) => (
+            <View key={i.id} style={styles.issueRow}>
+              <View style={[styles.dot, { backgroundColor: colorOf(results[i.id]) }]} />
+              <Text style={{ flex: 1 }}>
+                <Text style={{ fontWeight: '700' }}>{results[i.id]}: </Text>
+                {i.text}
+              </Text>
+            </View>
+          ))}
+        </View>
+      )}
+
+      {checklist.map((section) => (
+        <View key={section.category} style={styles.section}>
+          <Text style={styles.sectionHead}>{section.category}</Text>
+          {section.items.map((item) => (
+            <View key={item.id} style={styles.row}>
+              <Text style={styles.itemText}>{item.text}</Text>
+              <View style={[styles.pill, { backgroundColor: colorOf(results[item.id]) }]}>
+                <Text style={[styles.pillText, results[item.id] === 'Warning' && { color: '#333' }]}>
+                  {results[item.id]}
+                </Text>
+              </View>
+            </View>
+          ))}
+        </View>
+      ))}
+
+      {notes ? (
+        <View style={styles.section}>
+          <Text style={styles.sectionHead}>Inspector notes</Text>
+          <Text>{notes}</Text>
+        </View>
+      ) : null}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  summary: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, padding: 14, borderRadius: 12, marginBottom: 10 },
+  verdict: { fontSize: 16, fontWeight: 'bold' },
+  counts: { marginTop: 4, color: colors.muted },
+  date: { marginTop: 2, color: colors.muted, fontSize: 12 },
+  issueBox: { backgroundColor: '#fff4f4', borderColor: '#f3c4c8', borderWidth: 1, padding: 12, borderRadius: 12, marginBottom: 10 },
+  issueHead: { fontWeight: 'bold', marginBottom: 6, color: colors.fail },
+  issueRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 4 },
+  dot: { width: 10, height: 10, borderRadius: 5, marginRight: 8 },
+  section: { backgroundColor: colors.card, padding: 12, borderRadius: 12, marginBottom: 10 },
+  sectionHead: { fontWeight: 'bold', fontSize: 15, marginBottom: 6, color: colors.primary },
+  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 5 },
+  itemText: { flex: 1, paddingRight: 8 },
+  pill: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 10 },
+  pillText: { color: '#fff', fontSize: 12, fontWeight: '600' },
+});
