@@ -42,6 +42,15 @@ const TYPE_CATEGORIES = {
   pickup: ['truck', 'pickup'],
 };
 
+function PersonIcon() {
+  return (
+    <View style={{ alignItems: 'center', marginRight: 10 }}>
+      <View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: '#000' }} />
+      <View style={{ width: 17, height: 8, borderTopLeftRadius: 9, borderTopRightRadius: 9, backgroundColor: '#000', marginTop: 2 }} />
+    </View>
+  );
+}
+
 export default function HomeScreen({ navigation }) {
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
@@ -91,17 +100,20 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.title}>Vahane.lk</Text>
           <Text style={styles.sub}>{user ? `Hi, ${user.name}` : 'Every ad comes with an inspection report'}</Text>
         </View>
+      </View>
+
+      <View style={styles.actions}>
+        <TouchableOpacity
+          style={styles.accountBtn}
+          onPress={() => navigation.navigate(user ? 'MyAds' : 'Auth', user ? undefined : {})}
+        >
+          <PersonIcon />
+          <Text style={styles.accountText}>{user ? 'My Ads' : 'Login / Register'}</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.postBtn} onPress={goPost}>
           <Text style={styles.postText}>+ Post Ad</Text>
         </TouchableOpacity>
       </View>
-
-      <TouchableOpacity
-        style={styles.accountBtn}
-        onPress={() => navigation.navigate(user ? 'MyAds' : 'Auth', user ? undefined : {})}
-      >
-        <Text style={styles.accountText}>{user ? '👤 My Ads' : '🔑 Login / Register'}</Text>
-      </TouchableOpacity>
 
       <View style={styles.searchBox}>
         <Text style={{ fontSize: 16 }}>🔍</Text>
@@ -160,10 +172,11 @@ const styles = StyleSheet.create({
   top: { flexDirection: 'row', alignItems: 'center' },
   title: { fontSize: 28, fontWeight: 'bold', color: colors.primary },
   sub: { color: colors.muted, marginBottom: 6 },
-  postBtn: { backgroundColor: colors.primary, paddingVertical: 10, paddingHorizontal: 16, borderRadius: 10 },
+  postBtn: { backgroundColor: colors.primary, paddingVertical: 14, paddingHorizontal: 20, borderRadius: 12 },
   postText: { color: '#fff', fontWeight: '700' },
-  accountBtn: { backgroundColor: colors.accent, paddingVertical: 16, borderRadius: 12, marginBottom: 12, alignItems: 'center' },
-  accountText: { color: '#fff', fontWeight: '700', fontSize: 17 },
+  actions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 4, marginBottom: 12 },
+  accountBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderWidth: 1, borderColor: '#d6deec', paddingVertical: 14, paddingHorizontal: 18, borderRadius: 12 },
+  accountText: { color: '#000', fontWeight: '700', fontSize: 17 },
   searchBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, paddingHorizontal: 12, marginBottom: 8, borderWidth: 1, borderColor: '#d6deec' },
   searchInput: { flex: 1, paddingVertical: 12, paddingHorizontal: 8, fontSize: 15 },
   clear: { color: colors.muted, fontSize: 16, padding: 4 },
