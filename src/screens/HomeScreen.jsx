@@ -61,20 +61,18 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.links}>
-        <TouchableOpacity onPress={() => navigation.navigate('PriceGuide')}>
-          <Text style={styles.link}>💰 Price Guide</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate(user ? 'MyAds' : 'Auth', user ? undefined : {})}>
-          <Text style={styles.link}>{user ? '👤 My Ads' : '🔑 Login / Register'}</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.accountBtn}
+        onPress={() => navigation.navigate(user ? 'MyAds' : 'Auth', user ? undefined : {})}
+      >
+        <Text style={styles.accountText}>{user ? '👤 My Ads' : '🔑 Login / Register'}</Text>
+      </TouchableOpacity>
 
       <View style={styles.searchBox}>
         <Text style={{ fontSize: 16 }}>🔍</Text>
         <TextInput
           style={styles.searchInput}
-          placeholder="Search by model, e.g. Vitz, Premio, Hilux..."
+          placeholder="Search any vehicle"
           value={query}
           onChangeText={setQuery}
         />
@@ -138,8 +136,8 @@ const styles = StyleSheet.create({
   sub: { color: colors.muted, marginBottom: 6 },
   postBtn: { backgroundColor: colors.primary, paddingVertical: 10, paddingHorizontal: 16, borderRadius: 10 },
   postText: { color: '#fff', fontWeight: '700' },
-  links: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
-  link: { color: colors.accent, fontWeight: '600' },
+  accountBtn: { backgroundColor: colors.accent, paddingVertical: 16, borderRadius: 12, marginBottom: 12, alignItems: 'center' },
+  accountText: { color: '#fff', fontWeight: '700', fontSize: 17 },
   searchBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, paddingHorizontal: 12, marginBottom: 8, borderWidth: 1, borderColor: '#d6deec' },
   searchInput: { flex: 1, paddingVertical: 12, paddingHorizontal: 8, fontSize: 15 },
   clear: { color: colors.muted, fontSize: 16, padding: 4 },
