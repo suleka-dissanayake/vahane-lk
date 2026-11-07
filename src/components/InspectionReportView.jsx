@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import checklist from '../data/checklistItems.json';
+import { REPORT_DETAIL_LABELS } from '../utils/reportFields';
 import ScoreBadge from './ScoreBadge';
-import { ALL_ITEMS, OPTIONS, verdict, countStatus, scoreColor } from '../utils/report';
+import { ALL_ITEMS, ALL_SECTIONS, OPTIONS, verdict, countStatus, scoreColor } from '../utils/report';
 import { colors } from '../theme';
 
 const colorOf = (label) => OPTIONS.find((o) => o.label === label)?.color || colors.chip;
 
 export default function InspectionReportView({ report }) {
   const { results, notes, score, date } = report;
+  const detailRows = Object.entries(report.details || {}).filter(([k]) => REPORT_DETAIL_LABELS[k]);
   const issues = ALL_ITEMS.filter((i) => results[i.id] === 'Fail' || results[i.id] === 'Warning').sort(
     (a, b) => (results[a.id] === 'Fail' ? 0 : 1) - (results[b.id] === 'Fail' ? 0 : 1)
   );
@@ -42,10 +43,22 @@ export default function InspectionReportView({ report }) {
         </View>
       )}
 
-      {checklist.map((section) => (
+      {detailRows.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionHead}>Report details</Text>
+          {detailRows.map(([k, v]) => (
+            <View key={k} style={styles.row}>
+              <Text style={styles.itemText}>{REPORT_DETAIL_LABELS[k]}</Text>
+              <Text style={{ fontWeight: '600' }}>{String(v)}</Text>
+            </View>
+          ))}
+        </View>
+      )}
+
+      {ALL_SECTIONS.filter((section) => section.items.some((i) => results[i.id])).map((section) => (
         <View key={section.category} style={styles.section}>
           <Text style={styles.sectionHead}>{section.category}</Text>
-          {section.items.map((item) => (
+          {section.items.filter((i) => results[i.id]).map((item) => (
             <View key={item.id} style={styles.row}>
               <Text style={styles.itemText}>{item.text}</Text>
               <View style={[styles.pill, { backgroundColor: colorOf(results[item.id]) }]}>

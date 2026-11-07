@@ -14,9 +14,9 @@ export default function AttachmentPicker({ items, onChange }) {
 
   return (
     <View style={styles.box}>
-      <Text style={styles.head}>📎 Official inspection report (optional)</Text>
+      <Text style={styles.head}>📎 Inspection report (required)</Text>
       <Text style={styles.sub}>
-        Attach a photo or PDF of a professional inspection report. Up to {MAX_FILES} files, {formatSize(MAX_BYTES)} each.
+        Attach a photo or PDF of the inspection report. Up to {MAX_FILES} files, {formatSize(MAX_BYTES)} each.
       </Text>
 
       <View style={styles.row}>

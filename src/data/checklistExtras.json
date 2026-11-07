@@ -1,0 +1,17 @@
+{
+  "Used": [
+    { "category": "Documents & History", "items": [
+      { "id": "u1", "text": "Registration book (CR) and revenue licence are valid and match the vehicle" },
+      { "id": "u2", "text": "Service history records are available" },
+      { "id": "u3", "text": "Emission test certificate is valid" }
+    ] }
+  ],
+  "Reconditioned": [
+    { "category": "Import & Auction Verification", "items": [
+      { "id": "r1", "text": "Chassis number matches the auction sheet / import documents" },
+      { "id": "r2", "text": "Mileage matches the auction sheet (no meter tampering)" },
+      { "id": "r3", "text": "Panel marks on the auction sheet match the actual body" },
+      { "id": "r4", "text": "Underbody is free of corrosion (sea freight / salt exposure)" }
+    ] }
+  ]
+}
