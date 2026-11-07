@@ -8,6 +8,7 @@ import { confirmAction } from '../utils/alert';
 import cars from '../data/carModels.json';
 import InspectionReportView from '../components/InspectionReportView';
 import AttachmentViewer from '../components/AttachmentViewer';
+import PhotoGallery from '../components/PhotoGallery';
 import { colors } from '../theme';
 
 export default function ListingDetailScreen({ route, navigation }) {
@@ -30,6 +31,7 @@ export default function ListingDetailScreen({ route, navigation }) {
     else if (listing.price > model.priceMax) market = { t: 'Above the typical market range', c: colors.fail };
     else market = { t: 'Within the typical market range', c: colors.accent };
   }
+  const photoIds = listing.photoIds || (listing.photoId ? [listing.photoId] : []);
   const isOwner = user && user.id === listing.ownerId;
 
   const remove = () =>
@@ -49,6 +51,8 @@ export default function ListingDetailScreen({ route, navigation }) {
           {market.t} ({formatM(model.priceMin)} - {formatM(model.priceMax)})
         </Text>
       )}
+
+      {photoIds.length > 0 && <PhotoGallery ids={photoIds} />}
 
       <View style={styles.box}>
         {listing.condition ? <Text style={styles.line}>Condition: {listing.condition}</Text> : null}

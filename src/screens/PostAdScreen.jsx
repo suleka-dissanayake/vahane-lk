@@ -8,6 +8,7 @@ import Dropdown from '../components/Dropdown';
 import { pickPhoto, takePhoto } from '../utils/files';
 import { colors } from '../theme';
 
+const MAX_PHOTOS = 10;
 const CONDITIONS = ['Used', 'Reconditioned'];
 const CATEGORIES = ['Car', 'SUV', 'Van', 'Lorry', 'Motorcycle', 'Threewheel', 'Pickup'];
 const CATEGORY_OPTIONS = CATEGORIES.map((c) => ({ label: c, value: c }));
@@ -50,7 +51,7 @@ export default function PostAdScreen({ route, navigation }) {
   const [district, setDistrict] = useState('');
   const [phone, setPhone] = useState(user?.phone || '');
   const [description, setDescription] = useState('');
-  const [photo, setPhoto] = useState(null);
+  const [photos, setPhotos] = useState([]);
   // Reconditioned only
   const [country, setCountry] = useState('');
   const [grade, setGrade] = useState('');
@@ -66,6 +67,12 @@ export default function PostAdScreen({ route, navigation }) {
   const known = cars.find(
     (c) => c.make.toLowerCase() === make.trim().toLowerCase() && c.model.toLowerCase() === model.trim().toLowerCase()
   );
+
+  const addPhoto = async (picker) => {
+    if (photos.length >= MAX_PHOTOS) return notify(`You can add up to ${MAX_PHOTOS} photos`);
+    const f = await picker();
+    if (f) setPhotos((prev) => (prev.length >= MAX_PHOTOS ? prev : [...prev, f]));
+  };
 
   const next = () => {
     if (!condition) return notify('Select Used or Reconditioned');
@@ -86,7 +93,7 @@ export default function PostAdScreen({ route, navigation }) {
     if (!description.trim()) return notify('Enter a description');
 
     navigation.navigate('InspectionForm', {
-      photo,
+      photos,
       details: {
         carModelId: known ? known.id : null,
         condition,
@@ -151,23 +158,30 @@ export default function PostAdScreen({ route, navigation }) {
           <Text style={styles.label}>Description</Text>
           <TextInput style={[styles.input, { height: 80, textAlignVertical: 'top' }]} multiline value={description} onChangeText={setDescription} />
 
-          <Text style={styles.label}>Vehicle photo (optional)</Text>
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.chip} onPress={async () => { const f = await pickPhoto(); if (f) setPhoto(f); }}>
-              <Text>🖼️ Choose photo</Text>
+          <Text style={styles.label}>Vehicle photos (optional, up to {MAX_PHOTOS})</Text>
+          <Text style={styles.hint}>The first photo you add is shown in search results.</Text>
+          <View style={[styles.row, { marginTop: 8 }]}>
+            <TouchableOpacity style={styles.chip} onPress={() => addPhoto(pickPhoto)}>
+              <Text>🖼️ Add photo</Text>
             </TouchableOpacity>
             {Platform.OS !== 'web' && (
-              <TouchableOpacity style={styles.chip} onPress={async () => { const f = await takePhoto(); if (f) setPhoto(f); }}>
+              <TouchableOpacity style={styles.chip} onPress={() => addPhoto(takePhoto)}>
                 <Text>📷 Camera</Text>
               </TouchableOpacity>
             )}
+            <Text style={styles.photoCount}>{photos.length} / {MAX_PHOTOS}</Text>
           </View>
-          {photo && (
-            <View style={styles.photoRow}>
-              <Image source={{ uri: photo.dataUri }} style={styles.photo} />
-              <TouchableOpacity onPress={() => setPhoto(null)}>
-                <Text style={{ color: colors.fail, fontWeight: '600' }}>Remove</Text>
-              </TouchableOpacity>
+          {photos.length > 0 && (
+            <View style={styles.row}>
+              {photos.map((p, i) => (
+                <View key={p.id} style={styles.thumbWrap}>
+                  <Image source={{ uri: p.dataUri }} style={styles.thumb} />
+                  {i === 0 && <Text style={styles.cover}>Cover</Text>}
+                  <TouchableOpacity style={styles.removeBtn} onPress={() => setPhotos(photos.filter((x) => x.id !== p.id))}>
+                    <Text style={{ color: '#fff', fontWeight: '700' }}>✕</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
             </View>
           )}
 
@@ -191,8 +205,11 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', flexWrap: 'wrap' },
   chip: { paddingHorizontal: 14, paddingVertical: 8, backgroundColor: colors.chip, borderRadius: 20, marginRight: 8, marginBottom: 8 },
   chipOn: { backgroundColor: colors.primary },
-  photoRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
-  photo: { width: 96, height: 72, borderRadius: 10, marginRight: 14, backgroundColor: '#eee' },
+  photoCount: { alignSelf: 'center', color: colors.muted, marginLeft: 4, marginBottom: 8 },
+  thumbWrap: { width: 96, height: 72, marginRight: 8, marginBottom: 8 },
+  thumb: { width: 96, height: 72, borderRadius: 10, backgroundColor: '#eee' },
+  cover: { position: 'absolute', left: 4, bottom: 4, backgroundColor: colors.primary, color: '#fff', fontSize: 10, fontWeight: '700', paddingHorizontal: 6, paddingVertical: 1, borderRadius: 6, overflow: 'hidden' },
+  removeBtn: { position: 'absolute', right: 3, top: 3, width: 22, height: 22, borderRadius: 11, backgroundColor: 'rgba(0,0,0,0.65)', alignItems: 'center', justifyContent: 'center' },
   hint: { color: colors.accent, marginTop: 2 },
   btn: { backgroundColor: colors.primary, padding: 16, borderRadius: 12, marginTop: 24 },
   btnText: { color: '#fff', textAlign: 'center', fontWeight: '700', fontSize: 16 },

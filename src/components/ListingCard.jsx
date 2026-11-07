@@ -13,21 +13,28 @@ export default function ListingCard({ listing, onPress, showPhoto }) {
   const w = countStatus(listing.report.results, 'Warning');
   const f = countStatus(listing.report.results, 'Fail');
   const [photo, setPhoto] = useState(null);
+  const photoIds = listing.photoIds || (listing.photoId ? [listing.photoId] : []);
+  const coverId = photoIds[0]; // the first photo the seller added
 
   useEffect(() => {
     let alive = true;
-    if (showPhoto && listing.photoId) getAttachmentData(listing.photoId).then((d) => alive && setPhoto(d));
+    if (showPhoto && coverId) getAttachmentData(coverId).then((d) => alive && setPhoto(d));
     return () => { alive = false; };
-  }, [showPhoto, listing.photoId]);
+  }, [showPhoto, coverId]);
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       {showPhoto && (
         photo ? (
-          <Image source={{ uri: photo }} style={styles.photo} />
+          <View>
+            <Image source={{ uri: photo }} style={styles.photo} />
+            {photoIds.length > 1 && (
+              <View style={styles.count}><Text style={styles.countText}>📷 {photoIds.length}</Text></View>
+            )}
+          </View>
         ) : (
           <View style={[styles.photo, styles.placeholder]}>
-            <Text style={{ fontSize: 30 }}>{ICONS[String(listing.category).toLowerCase()] || '🚗'}</Text>
+            <Text style={{ fontSize: 40 }}>{ICONS[String(listing.category).toLowerCase()] || '🚗'}</Text>
           </View>
         )
       )}
@@ -50,7 +57,9 @@ export default function ListingCard({ listing, onPress, showPhoto }) {
 
 const styles = StyleSheet.create({
   card: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, padding: 16, borderRadius: 12, marginBottom: 10, elevation: 2 },
-  photo: { width: 84, height: 72, borderRadius: 10, marginRight: 12, backgroundColor: '#eef1f6' },
+  photo: { width: 112, height: 92, borderRadius: 10, marginRight: 12, backgroundColor: '#eef1f6' },
+  count: { position: 'absolute', right: 16, bottom: 4, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 8, paddingHorizontal: 6, paddingVertical: 1 },
+  countText: { color: '#fff', fontSize: 11, fontWeight: '600' },
   placeholder: { alignItems: 'center', justifyContent: 'center' },
   title: { fontSize: 17, fontWeight: 'bold' },
   meta: { color: colors.muted, marginTop: 2 },
