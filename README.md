@@ -13,9 +13,9 @@ Vahane.lk makes the inspection report the core of every ad.
 - 100% offline: all data in a local dataset and AsyncStorage, no APIs ()
 
 ## Run
-npm install
-npm install expo react-dom
-npx expo start
+- npm install
+- npm install expo react-dom
+- npx expo start
 
 ## License
 This project is done for an ICA under course unit IT3133 at the University of Vavuniya.
