@@ -7,6 +7,7 @@ import { getListings } from '../utils/storage';
 import cars from '../data/carModels.json';
 import ListingCard from '../components/ListingCard';
 import Dropdown from '../components/Dropdown';
+import Logo from '../components/Logo';
 import { colors } from '../theme';
 
 const TYPE_OPTIONS = [
@@ -96,11 +97,23 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={[styles.container, { paddingTop: insets.top + 12 }]}>
       <View style={styles.top}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.title}>Vahane.lk</Text>
-          <Text style={styles.sub}>{user ? `Hi, ${user.name}` : 'Every ad comes with an inspection report'}</Text>
-        </View>
+        <Logo />
       </View>
+
+      {user ? (
+        <TouchableOpacity style={styles.profileBtn} onPress={() => navigation.navigate('Profile')} activeOpacity={0.85}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>{(user.name || '?').trim().charAt(0).toUpperCase()}</Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.hi} numberOfLines={1}>Hi, {user.name}</Text>
+            <Text style={styles.viewProfile}>View your profile</Text>
+          </View>
+          <Text style={styles.chev}>›</Text>
+        </TouchableOpacity>
+      ) : (
+        <Text style={styles.sub}>Every ad comes with an inspection report</Text>
+      )}
 
       <View style={styles.actions}>
         <TouchableOpacity
@@ -169,7 +182,13 @@ export default function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
-  top: { flexDirection: 'row', alignItems: 'center' },
+  top: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
+  profileBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 14, paddingHorizontal: 16, marginBottom: 10 },
+  avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  avatarText: { color: colors.primary, fontSize: 20, fontWeight: 'bold' },
+  hi: { color: '#fff', fontSize: 19, fontWeight: 'bold' },
+  viewProfile: { color: '#cfe0f5', marginTop: 2 },
+  chev: { color: '#fff', fontSize: 28, marginLeft: 8 },
   title: { fontSize: 28, fontWeight: 'bold', color: colors.primary },
   sub: { color: colors.muted, marginBottom: 6 },
   postBtn: { backgroundColor: colors.primary, paddingVertical: 14, paddingHorizontal: 20, borderRadius: 12 },

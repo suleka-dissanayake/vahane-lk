@@ -9,6 +9,7 @@ import AuthScreen from './src/screens/AuthScreen';
 import PostAdScreen from './src/screens/PostAdScreen';
 import InspectionFormScreen from './src/screens/InspectionFormScreen';
 import MyAdsScreen from './src/screens/MyAdsScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
 import PriceGuideScreen from './src/screens/PriceGuideScreen';
 import ModelDetailScreen from './src/screens/ModelDetailScreen';
 
@@ -32,6 +33,7 @@ function Root() {
         <Stack.Screen name="PostAd" component={PostAdScreen} options={{ title: 'Post an Ad' }} />
         <Stack.Screen name="InspectionForm" component={InspectionFormScreen} options={{ title: 'Inspection Report' }} />
         <Stack.Screen name="MyAds" component={MyAdsScreen} options={{ title: 'My Ads' }} />
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'My Profile' }} />
         <Stack.Screen name="PriceGuide" component={PriceGuideScreen} options={{ title: 'Price Guide' }} />
         <Stack.Screen name="ModelDetail" component={ModelDetailScreen} options={{ title: 'Model Overview' }} />
       </Stack.Navigator>
