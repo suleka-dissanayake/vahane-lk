@@ -1,0 +1,23 @@
+[
+ {
+  "id": "u1",
+  "name": "Demo Seller",
+  "username": "demo",
+  "password": "demo123",
+  "phone": "0771234567"
+ },
+ {
+  "id": "u2",
+  "name": "Nimal Perera",
+  "username": "nimal",
+  "password": "nimal123",
+  "phone": "0712345678"
+ },
+ {
+  "id": "u3",
+  "name": "Kamala Silva",
+  "username": "kamala",
+  "password": "kamala123",
+  "phone": "0759876543"
+ }
+]
