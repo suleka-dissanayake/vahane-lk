@@ -36,7 +36,8 @@
    "notes": "Rear bumper repainted after a minor scrape. Everything else original.",
    "score": 96,
    "date": "2026-10-28"
-  }
+  },
+  "condition": "Used"
  },
  {
   "id": "L2",
@@ -75,7 +76,8 @@
    "notes": "Gear shift is slightly jerky when cold. AC cools but takes time.",
    "score": 93,
    "date": "2026-10-30"
-  }
+  },
+  "condition": "Used"
  },
  {
   "id": "L3",
@@ -114,7 +116,8 @@
    "notes": "Rust visible on both rear wheel arches. Minor oil seepage at valve cover.",
    "score": 89,
    "date": "2026-10-25"
-  }
+  },
+  "condition": "Reconditioned"
  },
  {
   "id": "L4",
@@ -153,7 +156,8 @@
    "notes": "Slight hesitation from standstill (DCT). Battery health looks normal.",
    "score": 96,
    "date": "2026-11-01"
-  }
+  },
+  "condition": "Reconditioned"
  },
  {
   "id": "L5",
@@ -192,7 +196,8 @@
    "notes": "Light smoke on hard acceleration. Front panel gap uneven, possible past repair. Suspension noise over bumps.",
    "score": 86,
    "date": "2026-10-20"
-  }
+  },
+  "condition": "Used"
  },
  {
   "id": "L6",
@@ -231,7 +236,8 @@
    "notes": "No issues found during inspection and test drive.",
    "score": 100,
    "date": "2026-11-02"
-  }
+  },
+  "condition": "Reconditioned"
  },
  {
   "id": "L7",
@@ -270,7 +276,8 @@
    "notes": "Cold start rough. Transmission slips between 2nd and 3rd. Brakes vibrate. Check engine light flickers.",
    "score": 82,
    "date": "2026-10-18"
-  }
+  },
+  "condition": "Used"
  },
  {
   "id": "L8",
@@ -309,6 +316,7 @@
    "notes": "Mild shudder at very low speed. Otherwise clean.",
    "score": 96,
    "date": "2026-11-03"
-  }
+  },
+  "condition": "Reconditioned"
  }
 ]
