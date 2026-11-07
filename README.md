@@ -10,14 +10,12 @@ Vahane.lk makes the inspection report the core of every ad.
 - Buyers see a clear report on each ad: score, verdict, issues found, every checked item, notes
 - Price guide and common faults per model, plus a market price comparison on each ad
 - My Ads (view and delete), inspection draft auto-save
-- 100% offline: all data in a local dataset and AsyncStorage, no APIs
-
-## Screens (8)
-Home (browse) • Ad Detail with report • Login/Register • Post Ad • Inspection Form • My Ads • Price Guide • Model Overview
-
-## Demo accounts
-demo / demo123, nimal / nimal123, kamala / kamala123
+- 100% offline: all data in a local dataset and AsyncStorage, no APIs ()
 
 ## Run
 npm install
-npx expo start --web
+npm install expo react-dom
+npx expo start
+
+## License
+This project is done for an ICA under course unit IT3133 at the University of Vavuniya.
