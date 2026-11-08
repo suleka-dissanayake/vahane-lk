@@ -8,7 +8,7 @@ import ListingCard from '../components/ListingCard';
 import { colors } from '../theme';
 
 export default function MyAdsScreen({ navigation }) {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [ads, setAds] = useState([]);
 
   const load = async () => {
@@ -36,16 +36,6 @@ export default function MyAdsScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.head}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={{ color: colors.muted }}>@{user.username} • {user.phone}</Text>
-        </View>
-        <TouchableOpacity onPress={async () => { await logout(); navigation.navigate('Home'); }}>
-          <Text style={{ color: colors.fail, fontWeight: '600' }}>Logout</Text>
-        </TouchableOpacity>
-      </View>
-
       <FlatList
         data={ads}
         keyExtractor={(i) => i.id}
@@ -73,8 +63,6 @@ export default function MyAdsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
-  head: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', padding: 14, borderRadius: 12, marginBottom: 12 },
-  name: { fontSize: 18, fontWeight: 'bold' },
   empty: { textAlign: 'center', marginTop: 30, color: colors.muted },
   btn: { backgroundColor: colors.primary, padding: 14, borderRadius: 12, marginTop: 10 },
   btnText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
