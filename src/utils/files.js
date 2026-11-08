@@ -97,3 +97,33 @@ export function openPdf(dataUri) {
     notify('PDF preview', 'PDF viewing is available in the web version. Images open inside the app.');
   }
 }
+
+// Download an attached report file.
+// Web: normal browser download. Phone: saves a temporary copy and opens the share sheet (Save to Files / Drive, WhatsApp, etc.)
+export async function downloadFile(name, dataUri) {
+  const [head, b64] = dataUri.split(',');
+  const mime = (head.match(/^data:(.*?);base64$/) || [])[1] || 'application/octet-stream';
+  const ext = mime === 'application/pdf' ? '.pdf' : mime === 'image/png' ? '.png' : '.jpg';
+  const base = (name || 'inspection-report').replace(/[^\w.\- ]+/g, '_');
+  const fileName = /\.\w{2,4}$/.test(base) ? base : base + ext;
+
+  if (Platform.OS === 'web') {
+    const a = document.createElement('a');
+    a.href = dataUri;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    return;
+  }
+  try {
+    const { File, Paths } = require('expo-file-system');
+    const Sharing = require('expo-sharing');
+    const file = new File(Paths.cache, `${Date.now()}_${fileName}`);
+    file.write(b64, { encoding: 'base64' });
+    if (!(await Sharing.isAvailableAsync())) return notify('Download is not available on this device');
+    await Sharing.shareAsync(file.uri, { mimeType: mime, dialogTitle: 'Save inspection report' });
+  } catch (e) {
+    notify('Could not download the file', 'Please try again.');
+  }
+}

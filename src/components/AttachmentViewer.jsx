@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, Modal, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, Modal, TouchableOpacity, Platform, StyleSheet } from 'react-native';
 import { getAttachmentData } from '../utils/storage';
-import { openPdf, formatSize } from '../utils/files';
+import { openPdf, downloadFile, formatSize } from '../utils/files';
 import { colors } from '../theme';
 
 function FileItem({ att, onOpenImage }) {
@@ -16,20 +16,30 @@ function FileItem({ att, onOpenImage }) {
         <Text style={{ fontSize: 26 }}>📄</Text>
         <View style={{ flex: 1, marginHorizontal: 10 }}>
           <Text numberOfLines={1} style={{ fontWeight: '600' }}>{att.name}</Text>
-          <Text style={{ color: colors.muted, fontSize: 12 }}>PDF • {formatSize(att.size)}</Text>
+          <Text style={{ color: colors.muted, fontSize: 12 }}>Inspection report • PDF • {formatSize(att.size)}</Text>
         </View>
-        <TouchableOpacity style={styles.openBtn} disabled={!data} onPress={() => openPdf(data)}>
-          <Text style={{ color: '#fff', fontWeight: '600' }}>Open</Text>
+        {Platform.OS === 'web' && (
+          <TouchableOpacity style={[styles.openBtn, { marginRight: 8 }]} disabled={!data} onPress={() => openPdf(data)}>
+            <Text style={{ color: '#fff', fontWeight: '600' }}>Open</Text>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity style={styles.downloadBtn} disabled={!data} onPress={() => downloadFile(att.name, data)}>
+          <Text style={styles.downloadText}>⬇ Download</Text>
         </TouchableOpacity>
       </View>
     );
   }
   if (!data) return <Text style={{ color: colors.muted, marginBottom: 8 }}>Loading {att.name}...</Text>;
   return (
-    <TouchableOpacity onPress={() => onOpenImage(data)} style={{ marginBottom: 10 }}>
-      <Image source={{ uri: data }} style={styles.image} resizeMode="cover" />
-      <Text style={styles.caption}>{att.name} (tap to enlarge)</Text>
-    </TouchableOpacity>
+    <View style={{ marginBottom: 12 }}>
+      <TouchableOpacity onPress={() => onOpenImage(data)}>
+        <Image source={{ uri: data }} style={styles.image} resizeMode="cover" />
+        <Text style={styles.caption}>{att.name} (tap to enlarge)</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={[styles.downloadBtn, { alignSelf: 'flex-start', marginTop: 6 }]} onPress={() => downloadFile(att.name, data)}>
+        <Text style={styles.downloadText}>⬇ Download inspection report</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -56,6 +66,8 @@ const styles = StyleSheet.create({
   caption: { color: colors.muted, fontSize: 12, marginTop: 4 },
   pdfRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 6 },
   openBtn: { backgroundColor: colors.primary, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8 },
+  downloadBtn: { backgroundColor: colors.pass, paddingHorizontal: 14, paddingVertical: 9, borderRadius: 8 },
+  downloadText: { color: '#fff', fontWeight: '700' },
   modal: { flex: 1, backgroundColor: 'rgba(0,0,0,0.92)', justifyContent: 'center', alignItems: 'center' },
   fullImage: { width: '95%', height: '85%' },
   close: { color: '#ccc', marginTop: 10 },
