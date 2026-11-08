@@ -2,6 +2,8 @@ import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { colors } from './src/theme';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import HomeScreen from './src/screens/HomeScreen';
 import ListingDetailScreen from './src/screens/ListingDetailScreen';
@@ -18,6 +20,7 @@ const Stack = createNativeStackNavigator();
 
 function Root() {
   const { ready } = useAuth();
+  const insets = useSafeAreaInsets(); // keeps every screen's bottom content above the Android navigation bar
   if (!ready) {
     return (
       <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -27,7 +30,10 @@ function Root() {
   }
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{ contentStyle: { backgroundColor: colors.bg, paddingBottom: insets.bottom } }}
+      >
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ListingDetail" component={ListingDetailScreen} options={{ title: 'Vehicle Ad' }} />
         <Stack.Screen name="Auth" component={AuthScreen} options={{ title: 'Account' }} />
@@ -45,8 +51,10 @@ function Root() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Root />
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <Root />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }
