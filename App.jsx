@@ -1,10 +1,10 @@
-import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from './src/theme';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
+import SplashScreen from './src/screens/SplashScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import ListingDetailScreen from './src/screens/ListingDetailScreen';
 import AuthScreen from './src/screens/AuthScreen';
@@ -21,13 +21,12 @@ const Stack = createNativeStackNavigator();
 function Root() {
   const { ready } = useAuth();
   const insets = useSafeAreaInsets(); // keeps every screen's bottom content above the Android navigation bar
-  if (!ready) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#1d3557" />
-      </View>
-    );
-  }
+  const [splash, setSplash] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setSplash(false), 5000); // intro page stays for 5 seconds
+    return () => clearTimeout(t);
+  }, []);
+  if (!ready || splash) return <SplashScreen />;
   return (
     <NavigationContainer>
       <Stack.Navigator
