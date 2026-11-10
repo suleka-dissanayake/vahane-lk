@@ -1,7 +1,7 @@
 export const colors = {
   bg: '#fbf5f5',
-  primary: '#c1121f',   // main red (buttons, headers)
-  accent: '#d62839',    // lighter red for links and highlights
+  primary: '#9b0d18',   // main dark red (buttons, headers)
+  accent: '#b3172a',    // red for links and highlights
   card: '#ffffff',
   text: '#1b1b1b',
   muted: '#666666',
