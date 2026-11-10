@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
   faultBtn: { backgroundColor: '#fde8e8', padding: 12, borderRadius: 10, alignItems: 'center' },
   callBtn: { backgroundColor: colors.primary, padding: 12, borderRadius: 10, marginTop: 8 },
   callText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
-  editBtn: { marginTop: 20, padding: 12, borderRadius: 10, backgroundColor: colors.edit },
-  editText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
+  editBtn: { marginTop: 20, padding: 12, borderRadius: 10, backgroundColor: '#fff', borderWidth: 2, borderColor: colors.edit },
+  editText: { color: colors.edit, textAlign: 'center', fontWeight: '700' },
   delBtn: { marginTop: 10, padding: 12, borderRadius: 10, borderWidth: 1, borderColor: colors.fail },
   delText: { color: colors.fail, textAlign: 'center', fontWeight: '600' },
 });
