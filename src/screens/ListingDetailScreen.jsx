@@ -43,7 +43,7 @@ export default function ListingDetailScreen({ route, navigation }) {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>
-        {listing.make} {listing.model} {listing.year}
+        {listing.make} {listing.model} {listing.year} ({listing.condition || 'Used'})
       </Text>
       <Text style={styles.price}>{formatLKR(listing.price)}</Text>
       {market && (

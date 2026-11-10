@@ -40,7 +40,7 @@ export default function ListingCard({ listing, onPress, showPhoto }) {
       )}
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>
-          {listing.make} {listing.model} {listing.year}
+          {listing.make} {listing.model} {listing.year} ({listing.condition || 'Used'})
         </Text>
         <Text style={styles.meta}>
           {listing.category} • {formatKm(listing.mileage)} • {listing.district}
