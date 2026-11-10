@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   avatarText: { color: '#fff', fontSize: 32, fontWeight: 'bold' },
   name: { fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginTop: 10 },
   username: { color: colors.muted, textAlign: 'center', marginTop: 2 },
-  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#e3e8f0' },
+  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#f0dcdc' },
   label: { color: colors.muted },
   value: { fontWeight: '600' },
   btn: { backgroundColor: colors.primary, padding: 14, borderRadius: 12, marginTop: 4 },

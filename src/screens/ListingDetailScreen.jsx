@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   line: { marginBottom: 3 },
   sub: { fontWeight: '600', marginBottom: 6, color: colors.accent },
   head: { fontSize: 19, fontWeight: 'bold', marginTop: 20, marginBottom: 8, color: colors.primary },
-  faultBtn: { backgroundColor: '#e8eef7', padding: 12, borderRadius: 10, alignItems: 'center' },
+  faultBtn: { backgroundColor: '#fde8e8', padding: 12, borderRadius: 10, alignItems: 'center' },
   callBtn: { backgroundColor: colors.primary, padding: 12, borderRadius: 10, marginTop: 8 },
   callText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
   editBtn: { marginTop: 20, padding: 12, borderRadius: 10, backgroundColor: colors.primary },

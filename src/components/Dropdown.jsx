@@ -42,14 +42,14 @@ export default function Dropdown({ options, value, onChange, style, placeholder 
 }
 
 const styles = StyleSheet.create({
-  button: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#fff', borderWidth: 1, borderColor: '#d6deec', borderRadius: 10, paddingHorizontal: 10, paddingVertical: 11 },
+  button: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#fff', borderWidth: 1, borderColor: '#ecd0d0', borderRadius: 10, paddingHorizontal: 10, paddingVertical: 11 },
   buttonText: { flex: 1, color: colors.text, fontSize: 13, fontWeight: '600' },
   placeholder: { color: colors.muted, fontWeight: '400' },
   arrow: { color: colors.muted, marginLeft: 4 },
   backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.35)', justifyContent: 'center', padding: 32 },
   sheet: { backgroundColor: '#fff', borderRadius: 14, paddingVertical: 6, overflow: 'hidden', maxHeight: '75%' },
   option: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 14, paddingHorizontal: 18 },
-  optionOn: { backgroundColor: '#e8eef7' },
+  optionOn: { backgroundColor: '#fde8e8' },
   optionText: { fontSize: 15, color: colors.text },
   optionTextOn: { color: colors.primary, fontWeight: '700' },
 });

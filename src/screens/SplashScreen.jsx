@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
   textRow: { flexDirection: 'row' },
   init: { color: colors.muted, fontSize: 15, fontWeight: '600', letterSpacing: 0.5 },
   dotsText: { width: 20 },
-  track: { width: '55%', height: 5, borderRadius: 3, backgroundColor: '#dde4ef', marginTop: 12, overflow: 'hidden' },
+  track: { width: '55%', height: 5, borderRadius: 3, backgroundColor: '#f3d6d6', marginTop: 12, overflow: 'hidden' },
   fill: { height: 5, borderRadius: 3, backgroundColor: colors.primary },
 });

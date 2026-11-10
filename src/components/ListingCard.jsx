@@ -57,7 +57,7 @@ export default function ListingCard({ listing, onPress, showPhoto }) {
 
 const styles = StyleSheet.create({
   card: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, padding: 16, borderRadius: 12, marginBottom: 10, elevation: 2 },
-  photo: { width: 112, height: 92, borderRadius: 10, marginRight: 12, backgroundColor: '#eef1f6' },
+  photo: { width: 112, height: 92, borderRadius: 10, marginRight: 12, backgroundColor: '#f6eaea' },
   count: { position: 'absolute', right: 16, bottom: 4, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 8, paddingHorizontal: 6, paddingVertical: 1 },
   countText: { color: '#fff', fontSize: 11, fontWeight: '600' },
   placeholder: { alignItems: 'center', justifyContent: 'center' },

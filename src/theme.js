@@ -1,12 +1,12 @@
 export const colors = {
-  bg: '#f4f6fb',
-  primary: '#1d3557',
-  accent: '#457b9d',
+  bg: '#fbf5f5',
+  primary: '#c1121f',   // main red (buttons, headers)
+  accent: '#d62839',    // lighter red for links and highlights
   card: '#ffffff',
   text: '#1b1b1b',
   muted: '#666666',
   pass: '#2a9d8f',
   warning: '#e9c46a',
   fail: '#e63946',
-  chip: '#e0e6f0',
+  chip: '#f3e1e1',
 };

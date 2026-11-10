@@ -31,7 +31,12 @@ function Root() {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Home"
-        screenOptions={{ contentStyle: { backgroundColor: colors.bg, paddingBottom: insets.bottom } }}
+        screenOptions={{
+          contentStyle: { backgroundColor: colors.bg, paddingBottom: insets.bottom },
+          headerStyle: { backgroundColor: colors.primary },
+          headerTintColor: '#fff',
+          headerTitleStyle: { fontWeight: '700' },
+        }}
       >
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ListingDetail" component={ListingDetailScreen} options={{ title: 'Vehicle Ad' }} />
