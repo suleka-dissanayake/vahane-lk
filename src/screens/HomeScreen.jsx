@@ -165,7 +165,7 @@ export default function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
-  top: { flexDirection: 'row', alignItems: 'center', marginBottom: 18 },
+  top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 18 },
   profileBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 14, paddingHorizontal: 16, marginBottom: 18 },
   avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', marginRight: 12 },
   avatarText: { color: colors.primary, fontSize: 20, fontWeight: 'bold' },
