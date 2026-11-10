@@ -77,7 +77,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={[styles.container, { paddingTop: insets.top + 12 }]}>
       <View style={styles.top}>
-        <Logo size={60} />
+        <Logo width={210} />
       </View>
 
       {user ? (

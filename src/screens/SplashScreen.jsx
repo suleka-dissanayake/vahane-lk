@@ -26,7 +26,7 @@ export default function SplashScreen() {
   return (
     <View style={styles.container}>
       <Animated.View style={{ opacity: fade, transform: [{ scale }] }}>
-        <Logo size={84} />
+        <Logo width={300} />
       </Animated.View>
 
       <View style={styles.bottom}>
