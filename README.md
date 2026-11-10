@@ -1,7 +1,7 @@
-# Vahane.lk - Used Car Marketplace with Inspection Reports
+# VAHANE.LK - Used Car Marketplace with Inspection Reports
 
-Existing Sri Lankan vehicle sites (riyasewana.com, ikman.lk) list vehicles but give buyers no standard inspection report.
-Vahane.lk makes the inspection report the core of every ad.
+Existing Sri Lankan vehicle sites list vehicles but give buyers no standard inspection report.
+VAHANE.LK makes the inspection report the core of every ad.
 
 ## Features
 - Browse ads without logging in (search, category filter, sorting)
