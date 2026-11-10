@@ -51,5 +51,5 @@ const styles = StyleSheet.create({
   empty: { textAlign: 'center', marginTop: 30, color: colors.muted },
   card: { backgroundColor: '#fff', padding: 16, borderRadius: 12, marginBottom: 10, elevation: 2 },
   name: { fontSize: 18, fontWeight: 'bold' },
-  price: { color: colors.pass, fontWeight: '600', marginTop: 4 },
+  price: { color: colors.primary, fontWeight: '600', marginTop: 4 },
 });

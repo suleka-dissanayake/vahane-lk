@@ -114,7 +114,7 @@ export default function ListingDetailScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
   title: { fontSize: 24, fontWeight: 'bold' },
-  price: { fontSize: 22, fontWeight: '700', color: colors.pass, marginTop: 4 },
+  price: { fontSize: 22, fontWeight: '700', color: colors.primary, marginTop: 4 },
   market: { marginTop: 2, fontWeight: '600' },
   box: { backgroundColor: '#fff', padding: 14, borderRadius: 12, marginTop: 10 },
   line: { marginBottom: 3 },
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   faultBtn: { backgroundColor: '#fde8e8', padding: 12, borderRadius: 10, alignItems: 'center' },
   callBtn: { backgroundColor: colors.primary, padding: 12, borderRadius: 10, marginTop: 8 },
   callText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
-  editBtn: { marginTop: 20, padding: 12, borderRadius: 10, backgroundColor: colors.primary },
+  editBtn: { marginTop: 20, padding: 12, borderRadius: 10, backgroundColor: colors.edit },
   editText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
   delBtn: { marginTop: 10, padding: 12, borderRadius: 10, borderWidth: 1, borderColor: colors.fail },
   delText: { color: colors.fail, textAlign: 'center', fontWeight: '600' },

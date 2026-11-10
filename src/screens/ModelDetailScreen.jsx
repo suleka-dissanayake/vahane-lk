@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: colors.bg },
   title: { fontSize: 26, fontWeight: 'bold' },
   meta: { color: colors.muted, marginVertical: 4 },
-  price: { fontSize: 18, color: colors.pass, fontWeight: '600' },
+  price: { fontSize: 18, color: colors.primary, fontWeight: '600' },
   head: { fontSize: 18, fontWeight: 'bold', marginTop: 20, marginBottom: 6 },
   line: { fontSize: 15, marginBottom: 4 },
   btn: { backgroundColor: colors.primary, padding: 16, borderRadius: 12, marginTop: 20 },

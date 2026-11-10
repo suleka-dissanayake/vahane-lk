@@ -63,6 +63,6 @@ const styles = StyleSheet.create({
   placeholder: { alignItems: 'center', justifyContent: 'center' },
   title: { fontSize: 17, fontWeight: 'bold' },
   meta: { color: colors.muted, marginTop: 2 },
-  price: { color: colors.pass, fontWeight: '700', fontSize: 16, marginTop: 4 },
+  price: { color: colors.primary, fontWeight: '700', fontSize: 16, marginTop: 4 },
   issues: { color: colors.muted, fontSize: 12, marginTop: 2 },
 });

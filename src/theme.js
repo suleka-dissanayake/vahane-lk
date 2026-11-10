@@ -8,5 +8,6 @@ export const colors = {
   pass: '#2a9d8f',
   warning: '#e9c46a',
   fail: '#e63946',
+  edit: '#b38600',      // dark yellow for Edit buttons
   chip: '#f3e1e1',
 };
