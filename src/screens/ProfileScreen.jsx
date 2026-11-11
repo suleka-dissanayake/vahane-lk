@@ -1,13 +1,18 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import { getListings } from '../utils/storage';
+import { notify } from '../utils/alert';
 import { colors } from '../theme';
 
 export default function ProfileScreen({ navigation }) {
-  const { user, logout } = useAuth();
+  const { user, logout, updateProfile } = useAuth();
   const [adCount, setAdCount] = useState(0);
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
 
   useFocusEffect(
     useCallback(() => {
@@ -26,6 +31,22 @@ export default function ProfileScreen({ navigation }) {
     );
   }
 
+  const startEdit = () => {
+    setName(user.name);
+    setPhone(user.phone || '');
+    setPassword('');
+    setEditing(true);
+  };
+
+  const save = async () => {
+    if (!name.trim()) return notify('Enter your name');
+    if (!/^0\d{9}$/.test(phone.trim())) return notify('Enter a valid phone number', 'Example: 0771234567');
+    if (password && password.length < 6) return notify('Password must be at least 6 characters');
+    await updateProfile({ name: name.trim(), phone: phone.trim(), password: password || null });
+    setEditing(false);
+    notify('Saved', 'Your account details have been updated.');
+  };
+
   const Row = ({ label, value }) => (
     <View style={styles.row}>
       <Text style={styles.label}>{label}</Text>
@@ -34,7 +55,7 @@ export default function ProfileScreen({ navigation }) {
   );
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <View style={styles.card}>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>{(user.name || '?').trim().charAt(0).toUpperCase()}</Text>
@@ -43,26 +64,56 @@ export default function ProfileScreen({ navigation }) {
         <Text style={styles.username}>@{user.username}</Text>
       </View>
 
-      <View style={styles.card}>
-        <Row label="Full name" value={user.name} />
-        <Row label="Username" value={`@${user.username}`} />
-        <Row label="Phone" value={user.phone} />
-        <Row label="Ads posted" value={String(adCount)} />
-      </View>
+      {editing ? (
+        <View style={styles.card}>
+          <Text style={styles.inputLabel}>Full name</Text>
+          <TextInput style={styles.input} value={name} onChangeText={setName} />
 
-      <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('MyAds')}>
-        <Text style={styles.btnText}>View My Ads</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.logout}
-        onPress={async () => {
-          await logout();
-          navigation.navigate('Home');
-        }}
-      >
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
-    </View>
+          <Text style={styles.inputLabel}>Username</Text>
+          <TextInput style={[styles.input, styles.locked]} value={`@${user.username}`} editable={false} />
+          <Text style={styles.note}>Username can't be changed.</Text>
+
+          <Text style={styles.inputLabel}>Phone</Text>
+          <TextInput style={styles.input} keyboardType="phone-pad" value={phone} onChangeText={setPhone} />
+
+          <Text style={styles.inputLabel}>New password (optional)</Text>
+          <TextInput style={styles.input} secureTextEntry placeholder="Leave empty to keep your password" value={password} onChangeText={setPassword} />
+
+          <TouchableOpacity style={styles.btn} onPress={save}>
+            <Text style={styles.btnText}>Save Changes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cancel} onPress={() => setEditing(false)}>
+            <Text style={styles.cancelText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <>
+          <View style={styles.card}>
+            <Row label="Full name" value={user.name} />
+            <Row label="Username" value={`@${user.username}`} />
+            <Row label="Phone" value={user.phone} />
+            <Row label="Ads posted" value={String(adCount)} />
+          </View>
+
+          <TouchableOpacity style={styles.editBtn} onPress={startEdit}>
+            <Text style={styles.editText}>✏️ Edit profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('MyAds')}>
+            <Text style={styles.btnText}>View My Ads</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.logout}
+            onPress={async () => {
+              await logout();
+              navigation.navigate('Home');
+            }}
+          >
+            <Text style={styles.logoutText}>Logout</Text>
+          </TouchableOpacity>
+        </>
+      )}
+      <View style={{ height: 30 }} />
+    </ScrollView>
   );
 }
 
@@ -76,8 +127,16 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#f0dcdc' },
   label: { color: colors.muted },
   value: { fontWeight: '600' },
-  btn: { backgroundColor: colors.primary, padding: 14, borderRadius: 12, marginTop: 4 },
+  inputLabel: { fontWeight: '600', marginTop: 10, marginBottom: 6 },
+  input: { backgroundColor: colors.bg, padding: 12, borderRadius: 10 },
+  locked: { color: colors.muted, backgroundColor: '#eee' },
+  note: { color: colors.muted, fontSize: 12, marginTop: 4 },
+  btn: { backgroundColor: colors.primary, padding: 14, borderRadius: 12, marginTop: 10 },
   btnText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
+  editBtn: { backgroundColor: '#fff', borderWidth: 2, borderColor: colors.edit, padding: 12, borderRadius: 12, marginTop: 4 },
+  editText: { color: colors.edit, textAlign: 'center', fontWeight: '700' },
+  cancel: { padding: 12, marginTop: 4 },
+  cancelText: { color: colors.muted, textAlign: 'center', fontWeight: '600' },
   logout: { padding: 14, marginTop: 6 },
   logoutText: { color: colors.fail, textAlign: 'center', fontWeight: '700' },
   empty: { textAlign: 'center', marginTop: 30, color: colors.muted },

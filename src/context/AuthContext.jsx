@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { initData, getSessionUser, loginUser, registerUser, clearSession } from '../utils/storage';
+import { initData, getSessionUser, loginUser, registerUser, clearSession, updateUser } from '../utils/storage';
 
 const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
@@ -31,8 +31,14 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const updateProfile = async (data) => {
+    const updated = await updateUser(user.id, data);
+    setUser(updated);
+    return updated;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, ready, login, register, logout }}>
+    <AuthContext.Provider value={{ user, ready, login, register, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );
