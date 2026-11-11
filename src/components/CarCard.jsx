@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { formatPrice } from '../utils/format';
+import { formatM } from '../utils/format';
 
 export default function CarCard({ car, onPress }) {
   return (
@@ -12,7 +12,7 @@ export default function CarCard({ car, onPress }) {
         {car.category} • {car.yearRange}
       </Text>
       <Text style={styles.price}>
-        LKR {formatPrice(car.priceMin)} - {formatPrice(car.priceMax)}
+        LKR {formatM(car.priceMin)} - {formatM(car.priceMax)}
       </Text>
     </TouchableOpacity>
   );

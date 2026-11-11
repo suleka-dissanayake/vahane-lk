@@ -1,4 +1,4 @@
-import checklist from '../data/checklistItems.json';
+import checklist from '../data/checkListItems.json';
 import extras from '../data/checklistExtras.json';
 import { colors } from '../theme';
 
