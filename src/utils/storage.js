@@ -96,6 +96,17 @@ export async function loginUser(username, password) {
   await AsyncStorage.setItem(K.session, user.id);
   return { ok: true, user };
 }
+export async function updateUser(id, { name, phone, password }) {
+  const users = await read(K.users, []);
+  const updated = users.map((u) =>
+    u.id === id ? { ...u, name, phone, ...(password ? { password: hash(password) } : {}) } : u
+  );
+  await write(K.users, updated);
+  // keep the seller name on this user's ads in sync
+  const listings = await getListings();
+  await write(K.listings, listings.map((l) => (l.ownerId === id ? { ...l, ownerName: name } : l)));
+  return updated.find((u) => u.id === id);
+}
 export async function getSessionUser() {
   try {
     const id = await AsyncStorage.getItem(K.session);
