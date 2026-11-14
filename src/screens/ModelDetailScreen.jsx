@@ -1,13 +1,16 @@
-import React, { useCallback, useState } from 'react';
-import { Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useCallback, useState, useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text } from '../components/Themed';
 import { useFocusEffect } from '@react-navigation/native';
 import cars from '../data/carModels.json';
 import { getListings } from '../utils/storage';
 import { formatM } from '../utils/format';
 import ListingCard from '../components/ListingCard';
-import { colors } from '../theme';
 
 export default function ModelDetailScreen({ route, navigation }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const car = cars.find((c) => c.id === route.params?.carId);
   const [ads, setAds] = useState([]);
 
@@ -49,7 +52,7 @@ export default function ModelDetailScreen({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: colors.bg },
   title: { fontSize: 26, fontWeight: 'bold' },
   meta: { color: colors.muted, marginVertical: 4 },

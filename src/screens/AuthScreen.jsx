@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { View, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { Text, TextInput } from '../components/Themed';
 import { useAuth } from '../context/AuthContext';
 import { notify } from '../utils/alert';
-import { colors } from '../theme';
 
 export default function AuthScreen({ route, navigation }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { login, register } = useAuth();
   const [mode, setMode] = useState('login');
   const [name, setName] = useState('');
@@ -55,11 +58,11 @@ export default function AuthScreen({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: colors.bg },
   title: { fontSize: 28, fontWeight: 'bold', color: colors.primary },
   sub: { color: colors.muted, marginBottom: 16, marginTop: 4 },
-  input: { backgroundColor: '#fff', padding: 12, borderRadius: 10, marginBottom: 10 },
+  input: { backgroundColor: colors.card, padding: 12, borderRadius: 10, marginBottom: 10 },
   btn: { backgroundColor: colors.primary, padding: 14, borderRadius: 12, marginTop: 6 },
   btnText: { color: '#fff', textAlign: 'center', fontWeight: '700', fontSize: 16 },
   switch: { color: colors.accent, textAlign: 'center', marginTop: 16, fontWeight: '600' },
