@@ -1,13 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { View, StyleSheet } from 'react-native';
+import { Text } from './Themed';
 import { REPORT_DETAIL_LABELS } from '../utils/reportFields';
 import ScoreBadge from './ScoreBadge';
 import { ALL_ITEMS, ALL_SECTIONS, OPTIONS, verdict, countStatus, scoreColor } from '../utils/report';
-import { colors } from '../theme';
 
-const colorOf = (label) => OPTIONS.find((o) => o.label === label)?.color || colors.chip;
+const colorOf = (label) => OPTIONS.find((o) => o.label === label)?.color || '#999';
 
 export default function InspectionReportView({ report }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { results, notes, score, date } = report;
   const detailRows = Object.entries(report.details || {}).filter(([k]) => REPORT_DETAIL_LABELS[k]);
   const issues = ALL_ITEMS.filter((i) => results[i.id] === 'Fail' || results[i.id] === 'Warning').sort(
@@ -81,12 +84,12 @@ export default function InspectionReportView({ report }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   summary: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, padding: 14, borderRadius: 12, marginBottom: 10 },
   verdict: { fontSize: 16, fontWeight: 'bold' },
   counts: { marginTop: 4, color: colors.muted },
   date: { marginTop: 2, color: colors.muted, fontSize: 12 },
-  issueBox: { backgroundColor: '#fff4f4', borderColor: '#f3c4c8', borderWidth: 1, padding: 12, borderRadius: 12, marginBottom: 10 },
+  issueBox: { backgroundColor: colors.issueBg, borderColor: colors.issueBorder, borderWidth: 1, padding: 12, borderRadius: 12, marginBottom: 10 },
   issueHead: { fontWeight: 'bold', marginBottom: 6, color: colors.fail },
   issueRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 4 },
   dot: { width: 10, height: 10, borderRadius: 5, marginRight: 8 },

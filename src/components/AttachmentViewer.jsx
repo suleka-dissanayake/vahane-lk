@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, Modal, TouchableOpacity, Platform, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { View, Image, Modal, TouchableOpacity, Platform, StyleSheet } from 'react-native';
+import { Text } from './Themed';
 import { getAttachmentData } from '../utils/storage';
 import { openPdf, downloadFile, formatSize } from '../utils/files';
-import { colors } from '../theme';
 
 function FileItem({ att, onOpenImage }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const [data, setData] = useState(null);
   useEffect(() => {
     getAttachmentData(att.id).then(setData);
@@ -44,6 +47,8 @@ function FileItem({ att, onOpenImage }) {
 }
 
 export default function AttachmentViewer({ attachments }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const [full, setFull] = useState(null);
   return (
     <View style={styles.box}>
@@ -60,9 +65,9 @@ export default function AttachmentViewer({ attachments }) {
   );
 }
 
-const styles = StyleSheet.create({
-  box: { backgroundColor: '#fff', padding: 12, borderRadius: 12, marginBottom: 10 },
-  image: { width: '100%', height: 200, borderRadius: 10, backgroundColor: '#eee' },
+const makeStyles = (colors) => StyleSheet.create({
+  box: { backgroundColor: colors.card, padding: 12, borderRadius: 12, marginBottom: 10 },
+  image: { width: '100%', height: 200, borderRadius: 10, backgroundColor: colors.placeholder },
   caption: { color: colors.muted, fontSize: 12, marginTop: 4 },
   pdfRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 6 },
   openBtn: { backgroundColor: colors.primary, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8 },
