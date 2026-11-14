@@ -2,8 +2,8 @@
   <img src="src/assets/logo.png" alt="Vahane.lk logo" width="320" />
 </p>
 
-<h1 align="center">Vahane.lk</h1>
-<p align="center"><b>Buy your car with confidence. Every ad comes with an inspection report.</b></p>
+<h1 align="center">VAHANE.LK</h1>
+<p align="center"><b>Buy your car with confidence - Every ad comes with an inspection report.</b></p>
 
 ---
 
