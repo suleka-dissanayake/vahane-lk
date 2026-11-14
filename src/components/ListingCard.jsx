@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text } from './Themed';
 import ScoreBadge from './ScoreBadge';
 import { formatLKR, formatKm } from '../utils/format';
 import { countStatus } from '../utils/report';
 import { getAttachmentData } from '../utils/storage';
-import { colors } from '../theme';
 
 const ICONS = { car: '🚗', sedan: '🚗', hatchback: '🚗', suv: '🚙', van: '🚐', lorry: '🚚', truck: '🛻', pickup: '🛻', motorcycle: '🏍️', threewheel: '🛺' };
 
 // showPhoto: small vehicle photo box on the left (used on the search results page)
 export default function ListingCard({ listing, onPress, showPhoto }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const w = countStatus(listing.report.results, 'Warning');
   const f = countStatus(listing.report.results, 'Fail');
   const [photo, setPhoto] = useState(null);
@@ -55,9 +58,9 @@ export default function ListingCard({ listing, onPress, showPhoto }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   card: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, padding: 16, borderRadius: 12, marginBottom: 10, elevation: 2 },
-  photo: { width: 112, height: 92, borderRadius: 10, marginRight: 12, backgroundColor: '#f6eaea' },
+  photo: { width: 112, height: 92, borderRadius: 10, marginRight: 12, backgroundColor: colors.placeholder },
   count: { position: 'absolute', right: 16, bottom: 4, backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 8, paddingHorizontal: 6, paddingVertical: 1 },
   countText: { color: '#fff', fontSize: 11, fontWeight: '600' },
   placeholder: { alignItems: 'center', justifyContent: 'center' },
