@@ -13,6 +13,7 @@ export default function InspectionReportView({ report }) {
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const { results, notes, score, date } = report;
   const detailRows = Object.entries(report.details || {}).filter(([k]) => REPORT_DETAIL_LABELS[k]);
+  const extraRows = (report.extras || []).filter((e) => e.label && e.value);
   const issues = ALL_ITEMS.filter((i) => results[i.id] === 'Fail' || results[i.id] === 'Warning').sort(
     (a, b) => (results[a.id] === 'Fail' ? 0 : 1) - (results[b.id] === 'Fail' ? 0 : 1)
   );
@@ -46,13 +47,19 @@ export default function InspectionReportView({ report }) {
         </View>
       )}
 
-      {detailRows.length > 0 && (
+      {(detailRows.length > 0 || extraRows.length > 0) && (
         <View style={styles.section}>
           <Text style={styles.sectionHead}>Report details</Text>
           {detailRows.map(([k, v]) => (
             <View key={k} style={styles.row}>
               <Text style={styles.itemText}>{REPORT_DETAIL_LABELS[k]}</Text>
               <Text style={{ fontWeight: '600' }}>{String(v)}</Text>
+            </View>
+          ))}
+          {extraRows.map((e, i) => (
+            <View key={'x' + i} style={styles.row}>
+              <Text style={styles.itemText}>{e.label}</Text>
+              <Text style={{ fontWeight: '600', flexShrink: 1, textAlign: 'right' }}>{e.value}</Text>
             </View>
           ))}
         </View>
