@@ -6,6 +6,8 @@ import { useAuth } from '../context/AuthContext';
 import cars from '../data/carModels.json';
 import { addListing, updateListing, getListing, getAttachmentData, getDraft, saveDraft, clearDraft, saveAttachmentData, removeAttachments } from '../utils/storage';
 import AttachmentPicker from '../components/AttachmentPicker';
+import ProcessingBanner from '../components/ProcessingBanner';
+import { extractReportDetails, canAutoRead } from '../utils/extractReport';
 import { OPTIONS, getChecklist, totalItems, computeScore } from '../utils/report';
 import { REPORT_FIELDS } from '../utils/reportFields';
 import { notify } from '../utils/alert';
@@ -27,6 +29,9 @@ export default function InspectionFormScreen({ route, navigation }) {
   const [loaded, setLoaded] = useState(false);
   const [original, setOriginal] = useState(null); // the existing ad when editing
   const [attachments, setAttachments] = useState([]);
+  const [fromReport, setFromReport] = useState({});
+  const [read, setRead] = useState({ status: 'idle', count: 0 });
+  const [extras, setExtras] = useState([]); // more details: [{ id, label, value, auto }]
   // Report details start from the step 1 values and the user can edit every field
   const [values, setValues] = useState(() =>
     Object.fromEntries(fields.map((f) => [f.key, details[f.key] != null ? String(details[f.key]) : '']))
@@ -43,6 +48,7 @@ export default function InspectionFormScreen({ route, navigation }) {
       if (d && d.draftKey === draftKey) {
         setResults(d.results || {});
         setNotes(d.notes || '');
+        if (d.extras) setExtras(d.extras);
         if (d.values) {
           const reportOnly = Object.fromEntries(fields.filter((f) => f.target === 'report' && d.values[f.key]).map((f) => [f.key, d.values[f.key]]));
           setValues((v) => ({ ...v, ...reportOnly }));
@@ -53,8 +59,8 @@ export default function InspectionFormScreen({ route, navigation }) {
   }, []);
 
   useEffect(() => {
-    if (loaded && !editId) saveDraft({ draftKey, results, notes, values });
-  }, [results, notes, values, loaded]);
+    if (loaded && !editId) saveDraft({ draftKey, results, notes, values, extras });
+  }, [results, notes, values, extras, loaded]);
 
   // Edit mode: load the saved report, details and report files
   useEffect(() => {
@@ -66,6 +72,7 @@ export default function InspectionFormScreen({ route, navigation }) {
       setOriginal(l);
       setResults(l.report.results || {});
       setNotes(l.report.notes || '');
+      setExtras((l.report.extras || []).map((e, i) => ({ id: 'e' + i, label: e.label, value: e.value, auto: false })));
       const rd = l.report.details || {};
       setValues((v) => ({
         ...v,
@@ -77,7 +84,54 @@ export default function InspectionFormScreen({ route, navigation }) {
     return () => { alive = false; };
   }, [editId]);
 
-  const setField = (key, text) => setValues((v) => ({ ...v, [key]: text }));
+  const setField = (key, text) => {
+    setValues((v) => ({ ...v, [key]: text }));
+    setFromReport((p) => ({ ...p, [key]: false }));
+  };
+
+  const addExtra = () => setExtras((p) => [...p, { id: 'm' + Date.now(), label: '', value: '', auto: false }]);
+  const setExtra = (id, key, text) => setExtras((p) => p.map((e) => (e.id === id ? { ...e, [key]: text, auto: false } : e)));
+  const removeExtra = (id) => setExtras((p) => p.filter((e) => e.id !== id));
+
+  // Read the attached report and fill in whatever details it contains
+  const readReport = async (file) => {
+    if (!canAutoRead) return setRead({ status: 'nokey', count: 0 });
+    setRead({ status: 'reading', count: 0 });
+    try {
+      const [found] = await Promise.all([
+        extractReportDetails(file, condition, fields),
+        new Promise((r) => setTimeout(r, 1500)), // keep the animation visible for a moment
+      ]);
+      const keys = Object.keys(found.fields);
+      const stamp = Date.now();
+      const autoExtras = found.extras.map((e, i) => ({ id: 'a' + stamp + i, label: e.label, value: e.value, auto: true }));
+      if (!keys.length && !autoExtras.length) return setRead({ status: 'failed', count: 0 });
+      setValues((v) => ({ ...v, ...found.fields }));
+      setFromReport((p) => ({ ...p, ...Object.fromEntries(keys.map((k) => [k, true])) }));
+      setExtras((prev) => {
+        const kept = prev.filter((e) => !e.auto);
+        const taken = new Set(kept.map((e) => e.label.trim().toLowerCase()));
+        return [...kept, ...autoExtras.filter((e) => !taken.has(e.label.toLowerCase()))];
+      });
+      setRead({ status: 'done', count: keys.length + autoExtras.length });
+    } catch (e) {
+      if (__DEV__) console.warn('Auto-fill failed:', e.message); // developer console only, never shown to users
+      setRead({ status: 'failed', count: 0 });
+    }
+  };
+
+  const changeAttachments = (list) => {
+    const firstAdded = attachments.length === 0 && list.length > 0;
+    setAttachments(list);
+    if (firstAdded) readReport(list[0]);
+    if (list.length === 0) setRead({ status: 'idle', count: 0 });
+  };
+
+  const readMsg = {
+    done: { text: `✅ Filled ${read.count} detail${read.count === 1 ? '' : 's'} from the report. Please check them.`, color: colors.pass },
+    failed: { text: "⚠️ Couldn't read this report automatically. Please enter the details below manually.", color: colors.fail },
+    nokey: { text: '⚠️ Auto-fill is not set up on this app. Please enter the details below manually.', color: colors.fail },
+  }[read.status];
 
   const publish = async () => {
     if (editId && !original) return notify('Please wait', 'Your ad is still loading.');
@@ -90,6 +144,9 @@ export default function InspectionFormScreen({ route, navigation }) {
       if (f.kind === 'number' && !(Number(v) >= 0)) return notify(`${f.label} must be a number`);
       if (f.kind === 'year' && !(Number(v) >= 1990 && Number(v) <= 2026)) return notify(`Enter a valid ${f.label.toLowerCase()}`, 'Between 1990 and 2026');
       if (f.kind === 'date' && !(/^\d{4}-\d{2}-\d{2}$/.test(v) && !isNaN(Date.parse(v)))) return notify('Enter the inspection date as YYYY-MM-DD');
+    }
+    for (const e of extras) {
+      if (!!e.label.trim() !== !!e.value.trim()) return notify('Complete or remove the extra detail', 'Each extra detail needs both a name and a value.');
     }
     if (!complete) return notify('Report incomplete', `Mark all ${total} items before publishing.`);
 
@@ -120,6 +177,7 @@ export default function InspectionFormScreen({ route, navigation }) {
         score: computeScore(cleanResults, condition),
         date: reportDetails.inspectionDate || today,
         details: reportDetails,
+        extras: extras.map((e) => ({ label: e.label.trim(), value: e.value.trim() })).filter((e) => e.label && e.value).slice(0, 20),
       },
       attachments: attMeta,
     };
@@ -156,7 +214,15 @@ export default function InspectionFormScreen({ route, navigation }) {
         {details.make} {details.model} {details.year}. Buyers will see this report on your ad.
       </Text>
 
-      <AttachmentPicker items={attachments} onChange={setAttachments} />
+      <AttachmentPicker items={attachments} onChange={changeAttachments} />
+
+      {read.status === 'reading' && <ProcessingBanner />}
+      {readMsg && <Text style={[styles.readMsg, { color: readMsg.color }]}>{readMsg.text}</Text>}
+      {attachments.length > 0 && read.status !== 'reading' && canAutoRead && (
+        <TouchableOpacity onPress={() => readReport(attachments[0])}>
+          <Text style={styles.reread}>↻ Read the report again</Text>
+        </TouchableOpacity>
+      )}
 
       <Text style={styles.head}>Report details</Text>
       <Text style={styles.sub}>Enter the details exactly as printed on the report.</Text>
@@ -165,6 +231,7 @@ export default function InspectionFormScreen({ route, navigation }) {
           <View key={f.key}>
             <Text style={styles.label}>
               {f.label}{f.required ? ' *' : ''}
+              {fromReport[f.key] ? <Text style={styles.tag}>  ✓ from report</Text> : null}
             </Text>
             <TextInput
               style={styles.input}
@@ -175,6 +242,27 @@ export default function InspectionFormScreen({ route, navigation }) {
             />
           </View>
         ))}
+      </View>
+
+      <Text style={styles.head}>More details</Text>
+      <Text style={styles.sub}>Other details found in the report appear here. Edit or remove them, and add any other detail yourself.</Text>
+      <View style={styles.box}>
+        {extras.length === 0 && <Text style={styles.empty}>No extra details yet.</Text>}
+        {extras.map((e) => (
+          <View key={e.id} style={styles.extraRow}>
+            <View style={{ flex: 1 }}>
+              <TextInput style={styles.input} placeholder="Detail (e.g. Engine number)" value={e.label} onChangeText={(t) => setExtra(e.id, 'label', t)} />
+              <TextInput style={[styles.input, { marginTop: 6 }]} placeholder="Value" value={e.value} onChangeText={(t) => setExtra(e.id, 'value', t)} />
+              {e.auto ? <Text style={[styles.tag, { marginTop: 4 }]}>✓ from report</Text> : null}
+            </View>
+            <TouchableOpacity style={styles.removeX} onPress={() => removeExtra(e.id)}>
+              <Text style={styles.removeText}>✕</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+        <TouchableOpacity style={styles.addBtn} onPress={addExtra}>
+          <Text style={styles.addText}>+ Add detail</Text>
+        </TouchableOpacity>
       </View>
 
       {model && (
@@ -237,6 +325,15 @@ const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
   step: { fontSize: 18, fontWeight: 'bold', color: colors.primary },
   sub: { color: colors.muted, marginBottom: 10 },
+readMsg: { marginTop: 10, fontWeight: '600' },
+    reread: { color: colors.accent, fontWeight: '600', marginTop: 8 },
+    tag: { color: colors.pass, fontWeight: '600', fontSize: 12 },
+    empty: { color: colors.muted, marginBottom: 6 },
+    extraRow: { flexDirection: 'row', alignItems: 'center', marginTop: 10 },
+    removeX: { width: 34, height: 34, borderRadius: 17, backgroundColor: colors.chip, alignItems: 'center', justifyContent: 'center', marginLeft: 10 },
+    removeText: { color: colors.fail, fontWeight: '700' },
+    addBtn: { marginTop: 12, borderWidth: 1.5, borderColor: colors.primary, borderRadius: 10, padding: 10 },
+    addText: { color: colors.accent, textAlign: 'center', fontWeight: '700' },
   box: { backgroundColor: colors.card, padding: 12, borderRadius: 12 },
   label: { fontWeight: '600', marginTop: 8, marginBottom: 4 },
   input: { backgroundColor: colors.bg, padding: 10, borderRadius: 8 },
