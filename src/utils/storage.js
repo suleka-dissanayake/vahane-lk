@@ -7,6 +7,7 @@ const K = {
   users: 'vahane_users',
   session: 'vahane_session',
   draft: 'vahane_draft',
+  theme: 'vahane_theme',
 };
 
 // Simple (non-secure) hash so passwords are not stored as plain text. Local demo only.
@@ -107,6 +108,8 @@ export async function updateUser(id, { name, phone, password }) {
   await write(K.listings, listings.map((l) => (l.ownerId === id ? { ...l, ownerName: name } : l)));
   return updated.find((u) => u.id === id);
 }
+export const getTheme = () => read(K.theme, 'light');
+export const saveTheme = (mode) => write(K.theme, mode);
 export async function getSessionUser() {
   try {
     const id = await AsyncStorage.getItem(K.session);
