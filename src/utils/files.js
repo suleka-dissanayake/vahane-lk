@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import { notify } from './alert';
+import { sniffMime } from './mime';
 
 export const MAX_FILES = 3;
 export const MAX_BYTES = 1024 * 1024; // 1 MB per file (device storage is limited)
@@ -19,7 +20,7 @@ function blobToDataUri(blob) {
 }
 
 async function assetToDataUri(asset, fallbackMime) {
-  if (asset.base64) return `data:${asset.mimeType || fallbackMime};base64,${asset.base64}`;
+  if (asset.base64) return `data:${sniffMime(asset.base64, asset.mimeType || fallbackMime)};base64,${asset.base64}`;
   if (asset.uri && asset.uri.startsWith('data:')) return asset.uri;
   if (asset.file) return blobToDataUri(asset.file);
   // Reads the picked file from the device itself (local file, not a network request)
