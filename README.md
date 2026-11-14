@@ -72,23 +72,47 @@ The app is a cross-platform mobile app (Android, iOS and web) built with React N
 
 ## 3. Screenshots
 
-> Add your own screenshots to `docs/screenshots/` using the file names below (see `docs/screenshots/README.md`). The images show up here automatically.
+### Home page (light and dark mode)
 
-| Intro page | Home (light) | Home (dark) |
-|:---:|:---:|:---:|
-| ![Intro page](docs/screenshots/01-splash.png) | ![Home light](docs/screenshots/02-home.png) | ![Home dark](docs/screenshots/03-home-dark.png) |
+| Light mode | Dark mode |
+|:---:|:---:|
+| <img src="docs/screenshots/01-home-light.png" alt="Home page in light mode" width="300" /> | <img src="docs/screenshots/02-home-dark.png" alt="Home page in dark mode" width="300" /> |
 
-| Search results | Ad detail | Inspection report |
-|:---:|:---:|:---:|
-| ![Search results](docs/screenshots/04-search-results.png) | ![Ad detail](docs/screenshots/05-ad-detail.png) | ![Inspection report](docs/screenshots/06-inspection-report.png) |
+The 🌙 / ☀️ button in the top right corner switches between light and dark mode.
 
-| Post Ad (step 1) | Inspection form (step 2) | My Ads |
-|:---:|:---:|:---:|
-| ![Post ad](docs/screenshots/07-post-ad.png) | ![Inspection form](docs/screenshots/08-inspection-form.png) | ![My ads](docs/screenshots/09-my-ads.png) |
+### Search
 
-| Profile |
+| Search results with vehicle photos |
 |:---:|
-| ![Profile](docs/screenshots/10-profile.png) |
+| <img src="docs/screenshots/05-search-results.png" alt="Search results" width="300" /> |
+
+### Post an Ad (Used and Reconditioned)
+
+| Used vehicle | Reconditioned vehicle |
+|:---:|:---:|
+| <img src="docs/screenshots/03-post-ad-used.png" alt="Post ad form for a used vehicle" width="300" /> | <img src="docs/screenshots/04-post-ad-reconditioned.png" alt="Post ad form for a reconditioned vehicle" width="300" /> |
+
+The first question decides which fields appear. Reconditioned vehicles also ask for the manufacture country, manufacture year, auction grade and auction authority.
+
+### Ad detail and inspection report
+
+| Reconditioned ad | Inspection report | Used ad with issues found |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/06-ad-detail.png" alt="Ad detail with photo gallery" width="250" /> | <img src="docs/screenshots/08-inspection-report.png" alt="Inspection report with score and report details" width="250" /> | <img src="docs/screenshots/09-ad-detail-used-issues.png" alt="Used ad with market comparison and issues found" width="250" /> |
+
+Full ad detail page (photos, vehicle details, attached report file with download button, score, report details, checklist, seller and Edit / Delete buttons):
+
+<p align="center">
+  <img src="docs/screenshots/07-ad-detail-full-page.png" alt="Full ad detail page" width="320" />
+</p>
+
+### My Ads
+
+| My Ads (Edit / Delete each ad) |
+|:---:|
+| <img src="docs/screenshots/10-my-ads.png" alt="My Ads page" width="300" /> |
+
+> More screenshots (intro page, inspection form, profile) can be added to `docs/screenshots/` later. See `docs/screenshots/README.md`.
 
 ---
 
