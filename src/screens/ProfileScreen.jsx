@@ -1,12 +1,15 @@
-import React, { useCallback, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import React, { useCallback, useState, useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { View, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { Text, TextInput } from '../components/Themed';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import { getListings } from '../utils/storage';
 import { notify } from '../utils/alert';
-import { colors } from '../theme';
 
 export default function ProfileScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { user, logout, updateProfile } = useAuth();
   const [adCount, setAdCount] = useState(0);
   const [editing, setEditing] = useState(false);
@@ -117,23 +120,23 @@ export default function ProfileScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
-  card: { backgroundColor: '#fff', borderRadius: 14, padding: 16, marginBottom: 12 },
+  card: { backgroundColor: colors.card, borderRadius: 14, padding: 16, marginBottom: 12 },
   avatar: { width: 72, height: 72, borderRadius: 36, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center', alignSelf: 'center' },
   avatarText: { color: '#fff', fontSize: 32, fontWeight: 'bold' },
   name: { fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginTop: 10 },
   username: { color: colors.muted, textAlign: 'center', marginTop: 2 },
-  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#f0dcdc' },
+  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   label: { color: colors.muted },
   value: { fontWeight: '600' },
   inputLabel: { fontWeight: '600', marginTop: 10, marginBottom: 6 },
   input: { backgroundColor: colors.bg, padding: 12, borderRadius: 10 },
-  locked: { color: colors.muted, backgroundColor: '#eee' },
+  locked: { color: colors.muted, backgroundColor: colors.placeholder },
   note: { color: colors.muted, fontSize: 12, marginTop: 4 },
   btn: { backgroundColor: colors.primary, padding: 14, borderRadius: 12, marginTop: 10 },
   btnText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
-  editBtn: { backgroundColor: '#fff', borderWidth: 2, borderColor: colors.edit, padding: 12, borderRadius: 12, marginTop: 4 },
+  editBtn: { backgroundColor: colors.card, borderWidth: 2, borderColor: colors.edit, padding: 12, borderRadius: 12, marginTop: 4 },
   editText: { color: colors.edit, textAlign: 'center', fontWeight: '700' },
   cancel: { padding: 12, marginTop: 4 },
   cancelText: { color: colors.muted, textAlign: 'center', fontWeight: '600' },

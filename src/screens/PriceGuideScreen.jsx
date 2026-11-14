@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, TextInput } from '../components/Themed';
 import cars from '../data/carModels.json';
 import { formatM } from '../utils/format';
-import { colors } from '../theme';
 
 const CATEGORIES = ['All', 'Sedan', 'SUV', 'Hatchback', 'Truck'];
 
 export default function PriceGuideScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('All');
 
@@ -42,14 +45,14 @@ export default function PriceGuideScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
-  input: { backgroundColor: '#fff', padding: 12, borderRadius: 10, marginBottom: 10 },
+  input: { backgroundColor: colors.card, padding: 12, borderRadius: 10, marginBottom: 10 },
   row: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 6 },
   chip: { paddingHorizontal: 14, paddingVertical: 8, backgroundColor: colors.chip, borderRadius: 20, marginRight: 8, marginBottom: 6 },
   chipOn: { backgroundColor: colors.primary },
   empty: { textAlign: 'center', marginTop: 30, color: colors.muted },
-  card: { backgroundColor: '#fff', padding: 16, borderRadius: 12, marginBottom: 10, elevation: 2 },
+  card: { backgroundColor: colors.card, padding: 16, borderRadius: 12, marginBottom: 10, elevation: 2 },
   name: { fontSize: 18, fontWeight: 'bold' },
   price: { color: colors.primary, fontWeight: '600', marginTop: 4 },
 });

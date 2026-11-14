@@ -1,5 +1,7 @@
-import React, { useCallback, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Linking, StyleSheet } from 'react-native';
+import React, { useCallback, useState, useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { View, ScrollView, TouchableOpacity, Linking, StyleSheet } from 'react-native';
+import { Text } from '../components/Themed';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import { getListing, deleteListing } from '../utils/storage';
@@ -9,9 +11,10 @@ import cars from '../data/carModels.json';
 import InspectionReportView from '../components/InspectionReportView';
 import AttachmentViewer from '../components/AttachmentViewer';
 import PhotoGallery from '../components/PhotoGallery';
-import { colors } from '../theme';
 
 export default function ListingDetailScreen({ route, navigation }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { user } = useAuth();
   const [listing, setListing] = useState(undefined);
 
@@ -111,19 +114,19 @@ export default function ListingDetailScreen({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
   title: { fontSize: 24, fontWeight: 'bold' },
   price: { fontSize: 22, fontWeight: '700', color: colors.primary, marginTop: 4 },
   market: { marginTop: 2, fontWeight: '600' },
-  box: { backgroundColor: '#fff', padding: 14, borderRadius: 12, marginTop: 10 },
+  box: { backgroundColor: colors.card, padding: 14, borderRadius: 12, marginTop: 10 },
   line: { marginBottom: 3 },
   sub: { fontWeight: '600', marginBottom: 6, color: colors.accent },
   head: { fontSize: 19, fontWeight: 'bold', marginTop: 20, marginBottom: 8, color: colors.primary },
-  faultBtn: { backgroundColor: '#fde8e8', padding: 12, borderRadius: 10, alignItems: 'center' },
+  faultBtn: { backgroundColor: colors.tint, padding: 12, borderRadius: 10, alignItems: 'center' },
   callBtn: { backgroundColor: colors.primary, padding: 12, borderRadius: 10, marginTop: 8 },
   callText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
-  editBtn: { marginTop: 20, padding: 12, borderRadius: 10, backgroundColor: '#fff', borderWidth: 2, borderColor: colors.edit },
+  editBtn: { marginTop: 20, padding: 12, borderRadius: 10, backgroundColor: colors.card, borderWidth: 2, borderColor: colors.edit },
   editText: { color: colors.edit, textAlign: 'center', fontWeight: '700' },
   delBtn: { marginTop: 10, padding: 12, borderRadius: 10, borderWidth: 1, borderColor: colors.fail },
   delText: { color: colors.fail, textAlign: 'center', fontWeight: '600' },
