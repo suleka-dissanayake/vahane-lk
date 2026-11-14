@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, Platform, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { View, TouchableOpacity, ScrollView, Image, Platform, StyleSheet } from 'react-native';
+import { Text, TextInput } from '../components/Themed';
 import { useAuth } from '../context/AuthContext';
 import cars from '../data/carModels.json';
 import { formatM } from '../utils/format';
@@ -7,7 +9,6 @@ import { notify } from '../utils/alert';
 import Dropdown from '../components/Dropdown';
 import { pickPhoto, takePhoto } from '../utils/files';
 import { getListing, getAttachmentData } from '../utils/storage';
-import { colors } from '../theme';
 
 const MAX_PHOTOS = 10;
 const CONDITIONS = ['Used', 'Reconditioned'];
@@ -26,6 +27,8 @@ const DISTRICT_OPTIONS = DISTRICTS.map((d) => ({ label: d, value: d }));
 const LEGACY_CATEGORY = { Sedan: 'Car', Hatchback: 'Car', SUV: 'SUV', Truck: 'Pickup' };
 
 function Chips({ options, value, onChange }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   return (
     <View style={styles.row}>
       {options.map((o) => (
@@ -38,6 +41,8 @@ function Chips({ options, value, onChange }) {
 }
 
 export default function PostAdScreen({ route, navigation }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { user } = useAuth();
   const preset = cars.find((c) => c.id === route.params?.carId);
   const [condition, setCondition] = useState(null); // 'Used' | 'Reconditioned'
@@ -233,18 +238,18 @@ export default function PostAdScreen({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
   step: { fontSize: 18, fontWeight: 'bold', color: colors.primary, marginBottom: 6 },
   label: { fontWeight: '600', marginTop: 12, marginBottom: 6 },
-  input: { backgroundColor: '#fff', padding: 12, borderRadius: 10 },
+  input: { backgroundColor: colors.card, padding: 12, borderRadius: 10 },
   full: { flex: 0, alignSelf: 'stretch' },
   row: { flexDirection: 'row', flexWrap: 'wrap' },
   chip: { paddingHorizontal: 14, paddingVertical: 8, backgroundColor: colors.chip, borderRadius: 20, marginRight: 8, marginBottom: 8 },
   chipOn: { backgroundColor: colors.primary },
   photoCount: { alignSelf: 'center', color: colors.muted, marginLeft: 4, marginBottom: 8 },
   thumbWrap: { width: 96, height: 72, marginRight: 8, marginBottom: 8 },
-  thumb: { width: 96, height: 72, borderRadius: 10, backgroundColor: '#eee' },
+  thumb: { width: 96, height: 72, borderRadius: 10, backgroundColor: colors.placeholder },
   cover: { position: 'absolute', left: 4, bottom: 4, backgroundColor: colors.primary, color: '#fff', fontSize: 10, fontWeight: '700', paddingHorizontal: 6, paddingVertical: 1, borderRadius: 6, overflow: 'hidden' },
   removeBtn: { position: 'absolute', right: 3, top: 3, width: 22, height: 22, borderRadius: 11, backgroundColor: 'rgba(0,0,0,0.65)', alignItems: 'center', justifyContent: 'center' },
   hint: { color: colors.accent, marginTop: 2 },

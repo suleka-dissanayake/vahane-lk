@@ -1,13 +1,16 @@
-import React, { useCallback, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useCallback, useState, useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text } from '../components/Themed';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import { getListings, deleteListing } from '../utils/storage';
 import { confirmAction } from '../utils/alert';
 import ListingCard from '../components/ListingCard';
-import { colors } from '../theme';
 
 export default function MyAdsScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { user } = useAuth();
   const [ads, setAds] = useState([]);
 
@@ -61,7 +64,7 @@ export default function MyAdsScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
   empty: { textAlign: 'center', marginTop: 30, color: colors.muted },
   btn: { backgroundColor: colors.primary, padding: 14, borderRadius: 12, marginTop: 10 },

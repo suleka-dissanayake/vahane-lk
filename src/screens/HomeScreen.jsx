@@ -1,5 +1,7 @@
-import React, { useCallback, useState } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useCallback, useState, useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, TextInput } from '../components/Themed';
 import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
@@ -8,8 +10,8 @@ import cars from '../data/carModels.json';
 import ListingCard from '../components/ListingCard';
 import Dropdown from '../components/Dropdown';
 import Logo from '../components/Logo';
+import ThemeToggle from '../components/ThemeToggle';
 import { filterListings } from '../utils/search';
-import { colors } from '../theme';
 
 const TYPE_OPTIONS = [
   { label: 'All', value: 'all' },
@@ -34,15 +36,18 @@ const SORT_OPTIONS = [
 ];
 
 function PersonIcon() {
+  const { colors } = useTheme();
   return (
     <View style={{ alignItems: 'center', marginRight: 10 }}>
-      <View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: '#000' }} />
-      <View style={{ width: 17, height: 8, borderTopLeftRadius: 9, borderTopRightRadius: 9, backgroundColor: '#000', marginTop: 2 }} />
+      <View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: colors.text }} />
+      <View style={{ width: 17, height: 8, borderTopLeftRadius: 9, borderTopRightRadius: 9, backgroundColor: colors.text, marginTop: 2 }} />
     </View>
   );
 }
 
 export default function HomeScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const [listings, setListings] = useState([]);
@@ -78,6 +83,9 @@ export default function HomeScreen({ navigation }) {
     <View style={[styles.container, { paddingTop: insets.top + 12 }]}>
       <View style={styles.top}>
         <Logo width={210} />
+        <View style={styles.themeBtn}>
+          <ThemeToggle />
+        </View>
       </View>
 
       {user ? (
@@ -163,11 +171,12 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
+  themeBtn: { position: 'absolute', right: 0, top: 0 },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 18 },
   profileBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 14, paddingHorizontal: 16, marginBottom: 18 },
-  avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.card, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
   avatarText: { color: colors.primary, fontSize: 20, fontWeight: 'bold' },
   hi: { color: '#fff', fontSize: 19, fontWeight: 'bold' },
   viewProfile: { color: '#ffd9d9', marginTop: 2 },
@@ -177,15 +186,15 @@ const styles = StyleSheet.create({
   postBtn: { backgroundColor: colors.primary, paddingVertical: 14, paddingHorizontal: 20, borderRadius: 12 },
   postText: { color: '#fff', fontWeight: '700' },
   actions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 4, marginBottom: 20 },
-  accountBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderWidth: 1, borderColor: '#ecd0d0', paddingVertical: 14, paddingHorizontal: 18, borderRadius: 12 },
-  accountText: { color: '#000', fontWeight: '700', fontSize: 17 },
-  searchBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, paddingHorizontal: 8, paddingLeft: 12, paddingVertical: 4, marginBottom: 14, borderWidth: 1, borderColor: '#ecd0d0' },
+  accountBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, paddingVertical: 14, paddingHorizontal: 18, borderRadius: 12 },
+  accountText: { color: colors.text, fontWeight: '700', fontSize: 17 },
+  searchBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: 12, paddingHorizontal: 8, paddingLeft: 12, paddingVertical: 4, marginBottom: 14, borderWidth: 1, borderColor: colors.border },
   searchInput: { flex: 1, paddingVertical: 12, paddingHorizontal: 8, fontSize: 15 },
   searchBtn: { backgroundColor: colors.primary, paddingVertical: 9, paddingHorizontal: 16, borderRadius: 9, marginLeft: 6 },
   searchBtnText: { color: '#fff', fontWeight: '700' },
   clear: { color: colors.muted, fontSize: 16, padding: 4 },
   row: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 6 },
-  suggest: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#fde8e8', borderRadius: 16, marginRight: 8, marginBottom: 6, borderWidth: 1, borderColor: '#e8c7c7' },
+  suggest: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: colors.tint, borderRadius: 16, marginRight: 8, marginBottom: 6, borderWidth: 1, borderColor: colors.border },
   filters: { flexDirection: 'row', marginBottom: 14 },
   filterGap: { marginHorizontal: 8 },
   count: { color: colors.muted, marginBottom: 6, fontWeight: '600' },

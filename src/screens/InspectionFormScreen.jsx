@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, TextInput } from '../components/Themed';
 import { useAuth } from '../context/AuthContext';
 import cars from '../data/carModels.json';
 import { addListing, updateListing, getListing, getAttachmentData, getDraft, saveDraft, clearDraft, saveAttachmentData, removeAttachments } from '../utils/storage';
@@ -7,9 +9,10 @@ import AttachmentPicker from '../components/AttachmentPicker';
 import { OPTIONS, getChecklist, totalItems, computeScore } from '../utils/report';
 import { REPORT_FIELDS } from '../utils/reportFields';
 import { notify } from '../utils/alert';
-import { colors } from '../theme';
 
 export default function InspectionFormScreen({ route, navigation }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { user } = useAuth();
   const { details, photos = [], editId } = route.params;
   const condition = details.condition === 'Reconditioned' ? 'Reconditioned' : 'Used';
@@ -230,21 +233,21 @@ export default function InspectionFormScreen({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
   step: { fontSize: 18, fontWeight: 'bold', color: colors.primary },
   sub: { color: colors.muted, marginBottom: 10 },
-  box: { backgroundColor: '#fff', padding: 12, borderRadius: 12 },
+  box: { backgroundColor: colors.card, padding: 12, borderRadius: 12 },
   label: { fontWeight: '600', marginTop: 8, marginBottom: 4 },
   input: { backgroundColor: colors.bg, padding: 10, borderRadius: 8 },
-  faults: { backgroundColor: '#fff8e6', padding: 12, borderRadius: 10, marginTop: 12 },
+  faults: { backgroundColor: colors.warnBg, padding: 12, borderRadius: 10, marginTop: 12 },
   faultHead: { fontWeight: 'bold', marginBottom: 4 },
   progress: { marginTop: 12, color: colors.muted },
   head: { fontSize: 17, fontWeight: 'bold', marginTop: 14, marginBottom: 6 },
-  item: { backgroundColor: '#fff', padding: 12, borderRadius: 10, marginBottom: 8 },
+  item: { backgroundColor: colors.card, padding: 12, borderRadius: 10, marginBottom: 8 },
   row: { flexDirection: 'row' },
   opt: { paddingHorizontal: 14, paddingVertical: 8, backgroundColor: colors.chip, borderRadius: 8, marginRight: 8 },
-  notes: { backgroundColor: '#fff', padding: 12, borderRadius: 10, height: 90, textAlignVertical: 'top' },
+  notes: { backgroundColor: colors.card, padding: 12, borderRadius: 10, height: 90, textAlignVertical: 'top' },
   btn: { backgroundColor: colors.primary, padding: 16, borderRadius: 12, marginTop: 20 },
   btnText: { color: '#fff', textAlign: 'center', fontWeight: '700', fontSize: 16 },
   warn: { textAlign: 'center', color: colors.fail, marginTop: 8 },
