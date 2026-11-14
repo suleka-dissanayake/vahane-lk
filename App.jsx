@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors } from './src/theme';
+import { ThemeProvider, useTheme } from './src/context/ThemeContext';
+import ThemeToggle from './src/components/ThemeToggle';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import SplashScreen from './src/screens/SplashScreen';
 import HomeScreen from './src/screens/HomeScreen';
@@ -20,6 +21,7 @@ const Stack = createNativeStackNavigator();
 
 function Root() {
   const { ready } = useAuth();
+  const { mode, colors } = useTheme();
   const insets = useSafeAreaInsets(); // keeps every screen's bottom content above the Android navigation bar
   const [splash, setSplash] = useState(true);
   useEffect(() => {
@@ -27,8 +29,10 @@ function Root() {
     return () => clearTimeout(t);
   }, []);
   if (!ready || splash) return <SplashScreen />;
+  const base = mode === 'dark' ? DarkTheme : DefaultTheme;
+  const navTheme = { ...base, colors: { ...base.colors, background: colors.bg, card: colors.primary, text: '#fff', border: colors.border, primary: colors.primary } };
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={navTheme}>
       <Stack.Navigator
         initialRouteName="Home"
         screenOptions={{
@@ -36,9 +40,11 @@ function Root() {
           headerStyle: { backgroundColor: colors.primary },
           headerTintColor: '#fff',
           headerTitleStyle: { fontWeight: '700' },
+          headerRight: () => <ThemeToggle variant="header" />,
+          statusBarStyle: 'light',
         }}
       >
-        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false, statusBarStyle: mode === 'dark' ? 'light' : 'dark' }} />
         <Stack.Screen name="ListingDetail" component={ListingDetailScreen} options={{ title: 'Vehicle Ad' }} />
         <Stack.Screen name="Auth" component={AuthScreen} options={{ title: 'Account' }} />
         <Stack.Screen name="PostAd" component={PostAdScreen} options={{ title: 'Post an Ad' }} />
@@ -56,9 +62,11 @@ function Root() {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <Root />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <Root />
+        </AuthProvider>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }
