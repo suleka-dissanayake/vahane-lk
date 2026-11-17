@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/assets/logo.png" alt="Vahane.lk logo" width="320" />
+  <img src="src/assets/logo-dark.png" alt="Vahane.lk logo" width="320" />
 </p>
 
 <h1 align="center">VAHANE.LK</h1>
