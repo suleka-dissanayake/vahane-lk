@@ -30,7 +30,7 @@ Existing Sri Lankan vehicle sites (riyasewana.com, ikman.lk) list vehicles, but 
 - Buyers see a clear **score, verdict, issues found and every checked item** on each ad.
 - Ads are clearly marked **Used** or **Reconditioned**, and each type has its own inspection details.
 
-The app is a cross-platform mobile app (Android, iOS and web) built with React Native and Expo. It runs **fully offline** (online version is being developed): there is no backend server and no external API. All data is stored on the device.
+The app is a cross-platform mobile app (Android, iOS and web) built with React Native and Expo. It runs **mostly offline** (online version is being developed): there is no backend server. All data is stored on the device.
 
 ---
 
@@ -53,6 +53,7 @@ The app is a cross-platform mobile app (Android, iOS and web) built with React N
      - Used: category, make, model, year, mileage, price, fuel (Petrol, Diesel, Hybrid, PHEV, Electric), transmission (Automatic / Manual), district (all 25 districts), phone, description (required) and up to **10 photos**.
      - Reconditioned: everything above plus manufacture country, manufacture year, auction grade and auction authority.
   2. **Inspection report (required).** Attach the report file (photo or PDF), fill in the report details and complete the checklist. Both the details and the checklist change with the vehicle type (Used / Reconditioned).
+- When submitting the inspection report, **Auto-Fill** button will automatically fill the details written on the report.
 - **Edit** any of your ads later (details, photos, report, checklist).
 - **My Ads** page to view, edit and delete your ads.
 - Inspection **draft auto-save** while filling the checklist.
