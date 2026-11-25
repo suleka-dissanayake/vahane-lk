@@ -277,7 +277,7 @@ Everything is saved locally with AsyncStorage:
 
 - Data is stored only on one device. A real release needs a backend (database, user accounts, image storage) so that ads are shared between users.
 - Passwords are stored locally with a simple hash. This is fine for a demo but not secure enough for a real service.
-- Inspection report details are typed in by the seller. Reading the report file automatically (OCR) is a possible future feature.
+- Inspection report details should be improved since currently has limited options.
 - Ideas: favourites, seller-to-buyer chat, push notifications, Sinhala and Tamil language support, verified inspector accounts.
 
 ---
