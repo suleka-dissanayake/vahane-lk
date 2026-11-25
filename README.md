@@ -30,7 +30,7 @@ Existing Sri Lankan vehicle sites (riyasewana.com, ikman.lk) list vehicles, but 
 - Buyers see a clear **score, verdict, issues found and every checked item** on each ad.
 - Ads are clearly marked **Used** or **Reconditioned**, and each type has its own inspection details.
 
-The app is a cross-platform mobile app (Android, iOS and web) built with React Native and Expo. It runs **fully offline**: there is no backend server and no external API. All data is stored on the device.
+The app is a cross-platform mobile app (Android, iOS and web) built with React Native and Expo. It runs **fully offline** (online version is being developed): there is no backend server and no external API. All data is stored on the device.
 
 ---
 
