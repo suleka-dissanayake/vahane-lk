@@ -47,7 +47,7 @@ The app is a cross-platform mobile app (Android, iOS and web) built with React N
 - Call the seller directly from the ad.
 
 **For sellers**
-- Register and log in (stored locally on the device).
+- Register and log in (stored locally on the device for now).
 - **Post Ad** in two steps:
   1. Vehicle details. The first question is **Used or Reconditioned**.
      - Used: category, make, model, year, mileage, price, fuel (Petrol, Diesel, Hybrid, PHEV, Electric), transmission (Automatic / Manual), district (all 25 districts), phone, description (required) and up to **10 photos**.
@@ -249,8 +249,6 @@ Every ad has a checklist. Each item is marked **Pass**, **Warning** or **Fail**.
 | Documents & History | **Used only** | 3 |
 | Import & Auction Verification | **Reconditioned only** | 4 |
 
-So a Used ad has 17 checklist items and a Reconditioned ad has 18.
-
 ### Report details (typed by the seller)
 
 | Used | Reconditioned |
@@ -274,22 +272,7 @@ Everything is saved locally with AsyncStorage:
 
 ---
 
-## 9. Troubleshooting
-
-| Problem | What to try |
-|---|---|
-| `UNKNOWN: unknown error, watch` when starting Expo | Move the project to a local drive such as `C:\`, then run `npm install` again. Also try Node 22 LTS instead of a very new Node version. |
-| `Unable to resolve module expo-file-system` (or `expo-sharing`) | Run `npx expo install expo-file-system expo-sharing`, then `npx expo start -c`. |
-| The phone cannot open the app / QR code does not work | Make sure the phone and computer are on the same Wi-Fi, or run `npx expo start --tunnel`. |
-| Old logo, colours or screens still showing | Run `npx expo start -c` to clear the cache. |
-| Bottom buttons hidden behind the Android navigation bar | Make sure you are using the latest `App.jsx` (it adds bottom spacing to every screen). |
-| "Could not save" when posting an ad with many photos | Device or browser storage is full. Use fewer or smaller photos. Browsers have a smaller storage limit than phones. |
-| Port 8081 already in use | Close the other Expo or Metro process, or accept the new port when Expo asks. |
-| Demo data looks outdated after an update | Clear the app storage (see section 6.4) so the demo data loads again. |
-
----
-
-## 10. Limitations and future work
+## 9. Limitations and future work
 
 - Data is stored only on one device. A real release needs a backend (database, user accounts, image storage) so that ads are shared between users.
 - Passwords are stored locally with a simple hash. This is fine for a demo but not secure enough for a real service.
@@ -298,6 +281,6 @@ Everything is saved locally with AsyncStorage:
 
 ---
 
-## 11. License
+## 10. License
 
 See the [LICENSE](LICENSE) file.
