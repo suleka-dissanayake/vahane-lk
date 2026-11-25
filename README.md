@@ -24,12 +24,11 @@
 
 Existing Sri Lankan vehicle sites (riyasewana.com, ikman.lk) list vehicles, but they give buyers **no standard inspection report**. A buyer has to trust the seller's words or pay for a separate inspection after finding a car.
 
-**Vahane.lk** makes the inspection report the core of every ad:
+**VAHANE.LK** makes the inspection report the core of every ad:
 
 - A seller cannot publish an ad without attaching an inspection report and completing a standard checklist.
 - Buyers see a clear **score, verdict, issues found and every checked item** on each ad.
 - Ads are clearly marked **Used** or **Reconditioned**, and each type has its own inspection details.
-- The app also shows typical market prices and common faults for popular models, so buyers can judge a price before they call the seller.
 
 The app is a cross-platform mobile app (Android, iOS and web) built with React Native and Expo. It runs **fully offline**: there is no backend server and no external API. All data is stored on the device.
 
