@@ -5,7 +5,7 @@ import { Text } from '../components/Themed';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import { getListing, deleteListing } from '../utils/storage';
-import { formatLKR, formatKm, formatM } from '../utils/format';
+import { formatLKR, formatKm } from '../utils/format';
 import { confirmAction } from '../utils/alert';
 import cars from '../data/carModels.json';
 import InspectionReportView from '../components/InspectionReportView';
@@ -28,12 +28,6 @@ export default function ListingDetailScreen({ route, navigation }) {
   if (!listing) return <Text style={{ padding: 20 }}>This ad no longer exists</Text>;
 
   const model = cars.find((c) => c.id === listing.carModelId);
-  let market = null;
-  if (model) {
-    if (listing.price < model.priceMin) market = { t: 'Below the typical market range', c: colors.pass };
-    else if (listing.price > model.priceMax) market = { t: 'Above the typical market range', c: colors.fail };
-    else market = { t: 'Within the typical market range', c: colors.accent };
-  }
   const photoIds = listing.photoIds || (listing.photoId ? [listing.photoId] : []);
   const isOwner = user && user.id === listing.ownerId;
 
@@ -49,11 +43,6 @@ export default function ListingDetailScreen({ route, navigation }) {
         {listing.make} {listing.model} {listing.year} ({listing.condition || 'Used'})
       </Text>
       <Text style={styles.price}>{formatLKR(listing.price)}</Text>
-      {market && (
-        <Text style={[styles.market, { color: market.c }]}>
-          {market.t} ({formatM(model.priceMin)} - {formatM(model.priceMax)})
-        </Text>
-      )}
 
       {photoIds.length > 0 && <PhotoGallery ids={photoIds} />}
 
@@ -118,7 +107,6 @@ const makeStyles = (colors) => StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: colors.bg },
   title: { fontSize: 24, fontWeight: 'bold' },
   price: { fontSize: 22, fontWeight: '700', color: colors.primary, marginTop: 4 },
-  market: { marginTop: 2, fontWeight: '600' },
   box: { backgroundColor: colors.card, padding: 14, borderRadius: 12, marginTop: 10 },
   line: { marginBottom: 3 },
   sub: { fontWeight: '600', marginBottom: 6, color: colors.accent },
