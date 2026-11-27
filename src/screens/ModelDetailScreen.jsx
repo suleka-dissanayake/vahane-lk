@@ -5,7 +5,6 @@ import { Text } from '../components/Themed';
 import { useFocusEffect } from '@react-navigation/native';
 import cars from '../data/carModels.json';
 import { getListings } from '../utils/storage';
-import { formatM } from '../utils/format';
 import ListingCard from '../components/ListingCard';
 
 export default function ModelDetailScreen({ route, navigation }) {
@@ -26,7 +25,6 @@ export default function ModelDetailScreen({ route, navigation }) {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{car.make} {car.model}</Text>
       <Text style={styles.meta}>{car.category} • {car.yearRange}</Text>
-      <Text style={styles.price}>LKR {formatM(car.priceMin)} - {formatM(car.priceMax)}</Text>
 
       <Text style={styles.head}>Specifications</Text>
       {Object.entries(car.specs).map(([k, v]) => (
