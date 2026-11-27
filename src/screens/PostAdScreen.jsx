@@ -4,7 +4,6 @@ import { View, TouchableOpacity, ScrollView, Image, Platform, StyleSheet } from 
 import { Text, TextInput } from '../components/Themed';
 import { useAuth } from '../context/AuthContext';
 import cars from '../data/carModels.json';
-import { formatM } from '../utils/format';
 import { notify } from '../utils/alert';
 import Dropdown from '../components/Dropdown';
 import { pickPhoto, takePhoto } from '../utils/files';
@@ -104,7 +103,7 @@ export default function PostAdScreen({ route, navigation }) {
   if (!editReady) return null;
 
   const isRecon = condition === 'Reconditioned';
-  // If the typed make + model matches a known model, we can show the market range and common faults
+  // If the typed make + model matches a known model, link the ad to it (used for the common faults list)
   const known = cars.find(
     (c) => c.make.toLowerCase() === make.trim().toLowerCase() && c.model.toLowerCase() === model.trim().toLowerCase()
   );
@@ -163,11 +162,6 @@ export default function PostAdScreen({ route, navigation }) {
           <TextInput style={styles.input} placeholder="e.g. Toyota" value={make} onChangeText={setMake} />
           <Text style={styles.label}>Model</Text>
           <TextInput style={styles.input} placeholder="e.g. Vitz" value={model} onChangeText={setModel} />
-          {known && (
-            <Text style={styles.hint}>
-              Typical market range: LKR {formatM(known.priceMin)} - {formatM(known.priceMax)}
-            </Text>
-          )}
 
           <Text style={styles.label}>{isRecon ? 'Manufacture year' : 'Year'}</Text>
           <TextInput style={styles.input} keyboardType="numeric" placeholder="e.g. 2016" value={year} onChangeText={setYear} />
