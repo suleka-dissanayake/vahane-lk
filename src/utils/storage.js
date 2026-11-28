@@ -10,11 +10,11 @@ const K = {
   theme: 'vahane_theme',
 };
 
-// Simple (non-secure) hash so passwords are not stored as plain text. Local demo only.
 export function hash(str) {
   let h = 5381;
-  for (let i = 0; i < str.length; i++) h = (h * 33) ^ str.charCodeAt(i);
-  return String(h >>> 0);
+  for (let i = 0; i < str.length; i++) 
+    h = (h * 33) ^ str.charCodeAt(i);
+  return String(h >>> 0);  //just a simple hash
 }
 
 async function read(key, fallback) {

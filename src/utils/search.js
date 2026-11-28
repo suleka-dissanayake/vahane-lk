@@ -1,4 +1,3 @@
-// Maps the vehicle type dropdown to the category stored on each listing
 export const TYPE_CATEGORIES = {
   car: ['sedan', 'hatchback', 'car'],
   suv: ['suv'],

@@ -1,6 +1,3 @@
-// Report detail fields differ by vehicle condition.
-// target: 'listing' = saved on the ad itself, 'report' = saved inside the inspection report.
-// kind: text | number | year | date
 export const REPORT_FIELDS = {
   Used: [
     { key: 'mileage', label: 'Mileage (km)', kind: 'number', required: true, target: 'listing', placeholder: 'e.g. 62000' },
@@ -22,7 +19,6 @@ export const REPORT_FIELDS = {
   ],
 };
 
-// Labels for the report-only fields (used when showing an ad)
 export const REPORT_DETAIL_LABELS = {};
 Object.values(REPORT_FIELDS).flat().forEach((f) => {
   if (f.target === 'report') REPORT_DETAIL_LABELS[f.key] = f.label;
