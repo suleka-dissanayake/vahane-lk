@@ -7,12 +7,12 @@ const shared = {
 export const lightColors = {
   ...shared,
   bg: '#fbf5f5',
-  primary: '#9b0d18',   // main dark red (buttons, headers)
-  accent: '#b3172a',    // red for links and highlights
+  primary: '#9b0d18',
+  accent: '#b3172a',
   card: '#ffffff',
   text: '#1b1b1b',
   muted: '#666666',
-  edit: '#b38600',      // dark yellow for Edit buttons
+  edit: '#866500',
   chip: '#f3e1e1',
   border: '#ecd0d0',
   tint: '#fde8e8',
