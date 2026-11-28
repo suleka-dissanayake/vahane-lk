@@ -1,5 +1,3 @@
-// Finds the real file type from the first bytes of a base64 string.
-// Some pickers report the wrong type (for example PNG while the data is JPEG), and Gemini rejects mismatched types.
 export function sniffMime(b64, fallback) {
   const h = (b64 || '').slice(0, 16);
   if (h.startsWith('/9j/')) return 'image/jpeg';

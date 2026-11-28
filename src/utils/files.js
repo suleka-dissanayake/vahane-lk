@@ -5,7 +5,7 @@ import { notify } from './alert';
 import { sniffMime } from './mime';
 
 export const MAX_FILES = 3;
-export const MAX_BYTES = 1024 * 1024; // 1 MB per file (device storage is limited)
+export const MAX_BYTES = 1024 * 1024; // 1 MB per file for storage optimization
 
 export const formatSize = (b) => (b < 1048576 ? Math.max(1, Math.round(b / 1024)) + ' KB' : (b / 1048576).toFixed(1) + ' MB');
 const approxBytes = (d) => Math.round(((d.length - d.indexOf(',') - 1) * 3) / 4);
@@ -99,8 +99,6 @@ export function openPdf(dataUri) {
   }
 }
 
-// Download an attached report file.
-// Web: normal browser download. Phone: saves a temporary copy and opens the share sheet (Save to Files / Drive, WhatsApp, etc.)
 export async function downloadFile(name, dataUri) {
   const [head, b64] = dataUri.split(',');
   const mime = (head.match(/^data:(.*?);base64$/) || [])[1] || 'application/octet-stream';
