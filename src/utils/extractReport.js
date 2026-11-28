@@ -1,19 +1,15 @@
-// Reads an attached inspection report (photo or PDF) with the Google Gemini API and returns:
-//   fields: the standard report details it found (only the ones clearly printed on the report)
-//   extras: other vehicle details printed on the report, as { label, value } pairs
-// Needs EXPO_PUBLIC_GEMINI_API_KEY in a .env file (see .env.example) and an internet connection.
-// If the key is missing or anything fails, the caller shows a message and the user types the details manually.
 import { sniffMime } from './mime';
 
 const API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
-const MODEL = process.env.EXPO_PUBLIC_GEMINI_MODEL || 'gemini-3.5-flash'; // can be changed in .env
+const MODEL = process.env.EXPO_PUBLIC_GEMINI_MODEL || 'gemini-3.5-flash';
 const FALLBACK_MODELS = ['gemini-2.5-flash', 'gemini-flash-latest'];
 const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
 export const canAutoRead = !!API_KEY;
 
 export async function extractReportDetails(file, condition, fields) {
-  if (!API_KEY) throw new Error('NO_KEY');
+  if (!API_KEY) 
+    throw new Error('NO_KEY');
 
   const [head, data] = file.dataUri.split(',');
   const declared = (head.match(/^data:(.*?);base64$/) || [])[1] || (file.type === 'pdf' ? 'application/pdf' : 'image/jpeg');
@@ -38,7 +34,6 @@ export async function extractReportDetails(file, condition, fields) {
     generationConfig: { responseMimeType: 'application/json' },
   });
 
-  // Try the chosen model first. If Google says that model does not exist for this key, try the fallbacks.
   const models = [MODEL, ...FALLBACK_MODELS.filter((m) => m !== MODEL)];
   let res;
   for (const model of models) {
